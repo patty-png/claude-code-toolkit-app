@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/* ── Claude Code brand palette ── */
+:root {
+  --paper: #f0eee6;
+  --paper-2: #e8e4d8;
+  --paper-3: #ddd6c5;
+  --ink: #141413;
+  --ink-2: #2b2926;
+  --muted: #7a736b;
+  --rule: #d4ccbc;
+  --accent: #cc785c;
+  --accent-ink: #a0583f;
+  --accent-soft: #e8c5b6;
+  --highlight: #fef3c7;
+  --ok: #4a7c1e;
+  --term-bg: #181715;
+  --term-line: #2a2724;
+  --term-text: #ece6d8;
+  --term-dim: #7a736b;
+  --term-accent: #e89b7d;
+  --term-green: #a3b86c;
+  --term-yellow: #e8c670;
+  --radius: 4px;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-paper-3: var(--paper-3);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-term-bg: var(--term-bg);
+  --color-term-text: var(--term-text);
+  --color-term-accent: var(--term-accent);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-plex), system-ui, sans-serif;
+  line-height: 1.55;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+code, pre, kbd {
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+
+pre {
+  background: var(--ink);
+  color: var(--term-text);
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
