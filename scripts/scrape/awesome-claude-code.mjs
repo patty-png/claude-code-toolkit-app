@@ -12,22 +12,28 @@ const README_URLS = [
   'https://raw.githubusercontent.com/hesreallyhim/awesome-claude-code/master/README.md',
 ]
 
-// Map section headings → our category ids
+// Map section headings → our category ids (checked in order, first match wins)
 const SECTION_CATEGORY = [
-  { match: /mcp|model context protocol/i, cat: 'mcp' },
-  { match: /skill/i,                       cat: 'skill' },
-  { match: /agent|subagent/i,              cat: 'agent' },
-  { match: /hook|observ/i,                 cat: 'auto' },
-  { match: /plugin|marketplace/i,          cat: 'tool' },
-  { match: /integration|saas|service/i,    cat: 'saas' },
-  { match: /learn|tutorial|video|course/i, cat: 'learn' },
+  { match: /mcp|model context protocol/i,              cat: 'mcp' },
+  { match: /agent skill|\bskill/i,                     cat: 'skill' },
+  { match: /slash[- ]?command|claude\.md|workflow/i,   cat: 'skill' },
+  { match: /hook|status[- ]?line|observ|monitor/i,     cat: 'auto' },
+  { match: /subagent|\bagent\b/i,                      cat: 'agent' },
+  { match: /plugin|marketplace|alternative client/i,   cat: 'tool' },
+  { match: /integration|saas|service/i,                cat: 'saas' },
+  { match: /learn|tutorial|video|course|documentation/i, cat: 'learn' },
+  { match: /tooling|ide|orchestrator|config manager/i, cat: 'tool' },
 ]
 
-function categorizeBySection(heading) {
+function categorize(h2, h3) {
+  // Prefer H2 (broad category), fall back to H3 if H2 is generic
   for (const { match, cat } of SECTION_CATEGORY) {
-    if (match.test(heading)) return cat
+    if (h2 && match.test(h2)) return cat
   }
-  return 'tool'  // fallback
+  for (const { match, cat } of SECTION_CATEGORY) {
+    if (h3 && match.test(h3)) return cat
+  }
+  return 'tool'
 }
 
 async function fetchReadme() {
@@ -38,35 +44,60 @@ async function fetchReadme() {
   throw new Error('Could not fetch awesome-claude-code README')
 }
 
-// Match markdown list items: - [Name](url) — description  OR  * [Name](url): description
-const ENTRY_RE = /^\s*[-*]\s*\[([^\]]+?)\]\(([^)]+?)\)(?:\s*[—–\-:]\s*(.+))?$/
+// Match: - [Name](url) ...rest-of-line
+// "rest" may include "by [author](url)", em-dash, or plain dash separators.
+const ENTRY_RE = /^\s*[-*]\s*\[([^\]]+?)\]\(([^)]+?)\)\s*(.*)$/
+// Strip leading "by [author](url)" from the description remainder.
+const BY_AUTHOR_RE = /^(?:by\s+\[[^\]]+?\]\([^)]+?\))\s*/i
+// Trim a leading separator (em-dash, en-dash, hyphen, colon) and surrounding whitespace.
+const SEPARATOR_RE = /^\s*[—–\-:]\s*/
 
 function parseEntries(md) {
   const lines = md.split('\n')
   const entries = []
-  let currentSection = 'Tools'
+  let h2 = 'Tools', h3 = ''
 
   for (const rawLine of lines) {
     const line = rawLine.replace(/\r$/, '')
 
-    // Track the closest section heading
-    const heading = line.match(/^#{2,4}\s+(.+?)\s*$/)
-    if (heading) { currentSection = heading[1].replace(/[*`]/g, '').trim(); continue }
+    // Track H2 and H3 separately so we can prefer broader categories
+    const h2m = line.match(/^##\s+(.+?)\s*$/)
+    if (h2m) { h2 = h2m[1].replace(/[*`]/g, '').trim(); h3 = ''; continue }
+    const h3m = line.match(/^###\s+(.+?)\s*$/)
+    if (h3m) { h3 = h3m[1].replace(/[*`]/g, '').trim(); continue }
 
     const m = line.match(ENTRY_RE)
     if (!m) continue
 
-    const [, name, url, desc] = m
-    const gh = parseGitHubUrl(url)
+    const [, rawName, url, rest = ''] = m
+    const cleanUrl = url.trim()
+
+    // Skip anchor links, relative paths, mailto, and internal TOC references
+    if (cleanUrl.startsWith('#')) continue
+    if (cleanUrl.startsWith('mailto:')) continue
+    if (!cleanUrl.match(/^https?:\/\//i)) continue
+
+    // Skip if the URL points back to the awesome-claude-code repo itself
+    if (/hesreallyhim\/awesome-claude-code/i.test(cleanUrl)) continue
+
+    // Skip the "Latest Additions" section — entries repeat elsewhere
+    if (/latest addition/i.test(h2)) continue
+
+    // Clean description: strip "by [author](url)" and separator
+    let blurb = rest.replace(BY_AUTHOR_RE, '').replace(SEPARATOR_RE, '').trim()
+    // Remove any lingering markdown links from the description start
+    if (!blurb) blurb = null
+
+    const gh = parseGitHubUrl(cleanUrl)
 
     entries.push({
-      name: name.trim(),
-      url: url.trim(),
+      name: rawName.trim(),
+      url: cleanUrl,
       github_url: gh ? `https://github.com/${gh.owner}/${gh.repo}` : null,
-      blurb: desc?.trim() || null,
-      category_hint: categorizeBySection(currentSection),
-      tag: currentSection,
-      raw: { section: currentSection, line: rawLine },
+      blurb,
+      category_hint: categorize(h2, h3),
+      tag: h3 || h2,
+      raw: { h2, h3, line: rawLine },
     })
   }
   return entries
