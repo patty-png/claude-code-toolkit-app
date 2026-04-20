@@ -109,27 +109,32 @@ npm run dev
 
 Open [localhost:3000](http://localhost:3000).
 
-## Phases shipped
+## Foundation shipped
 
-- [x] **Phase 0** — Next.js + Supabase scaffold, Vercel CI
-- [x] **Phase 1** — 10-table Drizzle schema, 8 categories seeded
-- [x] **Phase 2** — 284 tools migrated from the static v18 directory
-- [x] **Phase 3** — Landing, `/explore`, ranked search, Top 5
-- [x] **Phase 4** — `/learn` — 12 videos, 6 courses, 4-phase roadmap
-- [x] **Phase 5** — Auth + synced `/stack` with RLS-protected credentials
+The core app (infra → directory → auth → synced stack) is live. Tags `phase-0` through `phase-5` on GitHub mark each checkpoint — `git checkout phase-N` to see the repo at that point.
 
-Each phase has a git tag — `git checkout phase-N` to see the repo at any checkpoint.
+| Tag | Shipped |
+|---|---|
+| `phase-0` | Next.js 16 + Supabase + Vercel CI |
+| `phase-1` | 10-table schema, 8 categories seeded |
+| `phase-2` | 284 tools migrated |
+| `phase-3` | Landing + `/explore` + ranked search + Top 5 |
+| `phase-4` | `/learn` — videos, courses, roadmap |
+| `phase-5` | Auth + synced `/stack` with RLS credentials |
 
-## Roadmap
+## What's next
 
-- [ ] **Scale content** — 500+ curated tools, 40+ videos, 20+ courses
-- [ ] **Community submissions** — PR-based tool submissions with moderation queue
-- [ ] **Tool detail pages** — `/explore/[slug]` with full README, reviews, changelog
-- [ ] **Ratings & reviews** — community feedback per tool
-- [ ] **Shareable stacks** — public `/stack/[slug]` URLs for stack showcases
-- [ ] **MCP health checks** — automated availability monitoring
-- [ ] **Weekly newsletter** — auto-generated digest of new tools
-- [ ] **Desktop companion** — local sync app for offline credential access
+Full plan in **[ROADMAP.md](ROADMAP.md)** with per-phase task checklists.
+
+| Phase | Goal |
+|---|---|
+| **🟠 6 — Data scaling** *(in progress)* | Scrape MCP.so, Smithery, Glama, Anthropic official, awesome-lists → **284 → 1,000+ tools** with GitHub stars and install counts |
+| 🟡 7 — Tool detail pages | `/explore/[slug]` with stats sidebar, README viewer, votes, related tools — match competitor UX |
+| 🟡 8 — UI/UX overhaul | Stats on cards, sort controls, publisher grouping, `/marketplaces` page, loading skeletons |
+| 🟢 9 — Community | Submissions + moderation queue, comments, leaderboards, shareable stacks |
+| 🔵 10 — Integrations | Browser extension, CLI sync, Slack bot, public API, RSS feeds |
+
+**Scraping sources** — the full prioritized list (Tier 1–4) is documented in **[SOURCES.md](SOURCES.md)**.
 
 ## Companion repo
 
