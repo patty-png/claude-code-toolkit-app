@@ -169,6 +169,7 @@ export function TerminalStage() {
         </div>
         <div className="landing-header-meta">
           <Link href="/explore">Explore</Link>
+          <Link href="/marketplaces">Marketplaces</Link>
           <Link href="/learn">Learn</Link>
           <Link href="/stack">My Stack</Link>
           <a href="https://github.com/patty-png/claude-code-toolkit-app" target="_blank" rel="noopener noreferrer">GitHub</a>

@@ -21,6 +21,7 @@ export default async function LearnPage() {
           </div>
           <nav style={{ display: 'flex', gap: 16, fontSize: '0.82rem' }}>
             <Link href="/explore" className="app-home">Explore</Link>
+            <Link href="/marketplaces" className="app-home">Marketplaces</Link>
             <Link href="/stack" className="app-home">My Stack</Link>
           </nav>
         </div>

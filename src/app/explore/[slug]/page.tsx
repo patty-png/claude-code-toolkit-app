@@ -134,7 +134,7 @@ export default async function ToolDetailPage({ params }: RouteProps) {
           )}
           {tool.publisher && (
             <>
-              <span className="publisher">{tool.publisher}</span>
+              <Link href={`/publisher/${encodeURIComponent(tool.publisher)}`} className="publisher">{tool.publisher}</Link>
               <span className="sep">/</span>
             </>
           )}
@@ -148,7 +148,8 @@ export default async function ToolDetailPage({ params }: RouteProps) {
               <h1 className="detail-title">{tool.name}</h1>
               {tool.publisher && (
                 <div className="detail-publisher">
-                  {tool.publisher}{tool.repo_name && <span className="slash">/{tool.repo_name}</span>}
+                  <Link href={`/publisher/${encodeURIComponent(tool.publisher)}`}>{tool.publisher}</Link>
+                  {tool.repo_name && <span className="slash">/{tool.repo_name}</span>}
                 </div>
               )}
               {tool.blurb && <p className="detail-blurb">{tool.blurb}</p>}
