@@ -3,26 +3,30 @@ import { createClient } from '@/lib/supabase/server'
 export default async function Home() {
   let dbStatus = 'not connected'
   let toolCount: number | null = null
+  let catCount: number | null = null
 
   try {
     const supabase = await createClient()
-    const { count, error } = await supabase
-      .from('tools')
-      .select('*', { count: 'exact', head: true })
-    if (!error) {
+    const [tools, cats] = await Promise.all([
+      supabase.from('tools').select('*', { count: 'exact', head: true }),
+      supabase.from('categories').select('*', { count: 'exact', head: true }),
+    ])
+    if (!tools.error && !cats.error) {
       dbStatus = 'connected'
-      toolCount = count
+      toolCount = tools.count
+      catCount = cats.count
     }
   } catch {
     dbStatus = 'add .env.local to connect'
   }
 
   const checks = [
-    ['✓', 'Framework', 'Next.js 14 App Router + TypeScript'],
+    ['✓', 'Framework', 'Next.js 16 App Router + TypeScript'],
     ['✓', 'Fonts', 'Fraunces + IBM Plex Sans + JetBrains Mono'],
     ['✓', 'Styling', 'Tailwind CSS + Claude brand CSS vars'],
-    ['✓', 'Auth', 'Supabase SSR middleware wired'],
-    [dbStatus === 'connected' ? '✓' : '⚠', 'Database', dbStatus + (toolCount !== null ? ` — ${toolCount} tools` : '')],
+    ['✓', 'Auth', 'Supabase SSR proxy wired'],
+    ['✓', 'ORM', 'Drizzle schema — 10 tables typed'],
+    [dbStatus === 'connected' ? '✓' : '⚠', 'Database', dbStatus + (catCount !== null ? ` — ${catCount} categories, ${toolCount} tools` : '')],
   ]
 
   return (
@@ -47,12 +51,13 @@ export default async function Home() {
         </pre>
 
         <div style={{ marginTop: 40, padding: '16px 20px', background: '#1e1c1a', borderRadius: 8, fontSize: '0.74rem', lineHeight: 1.9 }}>
-          <div style={{ color: 'var(--term-dim)', marginBottom: 8 }}>NEXT STEPS</div>
-          <div><span style={{ color: 'var(--term-accent)' }}>1.</span> Create project at supabase.com</div>
-          <div><span style={{ color: 'var(--term-accent)' }}>2.</span> Copy .env.local.example → .env.local, fill in keys</div>
-          <div><span style={{ color: 'var(--term-accent)' }}>3.</span> Run schema SQL from ARCHITECTURE.md in Supabase SQL editor</div>
-          <div><span style={{ color: 'var(--term-accent)' }}>4.</span> Push repo to GitHub → import to Vercel → add env vars there</div>
-          <div><span style={{ color: 'var(--term-accent)' }}>5.</span> Tell Claude: "Phase 0 done, start Phase 1"</div>
+          <div style={{ color: 'var(--term-dim)', marginBottom: 8 }}>PHASES COMPLETE</div>
+          <div><span style={{ color: 'var(--term-green)' }}>✓</span> Phase 0 — Scaffold Next.js + Supabase + Vercel</div>
+          <div><span style={{ color: 'var(--term-green)' }}>✓</span> Phase 1 — Drizzle schema + 8 seeded categories</div>
+          <div><span style={{ color: 'var(--term-yellow)' }}>→</span> Phase 2 — Migrate 284 tools from v18 <span style={{ color: 'var(--term-dim)' }}>(up next)</span></div>
+          <div><span style={{ color: 'var(--term-dim)' }}>  </span><span style={{ color: 'var(--term-dim)' }}>Phase 3 — Directory UI + search + Top 5</span></div>
+          <div><span style={{ color: 'var(--term-dim)' }}>  </span><span style={{ color: 'var(--term-dim)' }}>Phase 4 — Education hub</span></div>
+          <div><span style={{ color: 'var(--term-dim)' }}>  </span><span style={{ color: 'var(--term-dim)' }}>Phase 5 — Auth + synced My Stack</span></div>
         </div>
 
         <div style={{ marginTop: 40, borderTop: '1px solid var(--term-line)', paddingTop: 24, fontSize: '0.72rem' }}>

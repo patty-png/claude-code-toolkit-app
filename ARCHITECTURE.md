@@ -60,7 +60,9 @@ Tailwind config extends `colors.brand.*` mapped to these vars.
 
 ## Database Schema
 
-Full Postgres DDL — run in Supabase SQL editor on first setup.
+![Schema diagram](docs/schema.png)
+
+10 tables, auth via `auth.users`. Full Postgres DDL — run in Supabase SQL editor on first setup.
 
 ```sql
 -- ============ CATEGORIES ============
