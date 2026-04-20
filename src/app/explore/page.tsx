@@ -42,9 +42,18 @@ export default async function ExplorePage() {
   const trending = (trendingRes.data ?? []) as any[]
 
   // Hide categories with no tools (quick distinct-category query)
-  const { data: distinctCats } = await supabase.from('tools').select('category_id').limit(10000)
-  const activeCategoryIds = new Set((distinctCats ?? []).map((t: any) => t.category_id).filter(Boolean))
-  const categories = allCategories.filter((c: any) => activeCategoryIds.has(c.id))
+  // Count per category via parallel HEAD queries (avoids 1000-row SELECT cap)
+  const catCounts = await Promise.all(
+    allCategories.map(async (c: any) => {
+      const { count } = await supabase
+        .from('tools')
+        .select('*', { count: 'exact', head: true })
+        .eq('category_id', c.id)
+      return { id: c.id, count: count ?? 0 }
+    })
+  )
+  const nonEmpty = new Set(catCounts.filter((c) => c.count > 0).map((c) => c.id))
+  const categories = allCategories.filter((c: any) => nonEmpty.has(c.id))
 
   return (
     <div className="view-app">
@@ -54,6 +63,7 @@ export default async function ExplorePage() {
           <div className="app-title">Claude Code <em>Toolkit</em></div>
           <nav style={{ display: 'flex', gap: 16, fontSize: '0.82rem' }}>
             <Link href="/marketplaces" className="app-home">Marketplaces</Link>
+            <Link href="/free-ai" className="app-home">Free AI</Link>
             <Link href="/learn" className="app-home">Learn</Link>
             <Link href="/stack" className="app-home">My Stack</Link>
           </nav>

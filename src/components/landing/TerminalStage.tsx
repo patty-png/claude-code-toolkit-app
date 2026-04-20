@@ -124,7 +124,15 @@ const NODES = [
   },
 ]
 
-export function TerminalStage() {
+export function TerminalStage({
+  toolCount = 2435,
+  categoryCount = 7,
+  publisherCount = 862,
+}: {
+  toolCount?: number
+  categoryCount?: number
+  publisherCount?: number
+} = {}) {
   const [active, setActive] = useState<string>('intro')
   const bodyRef = useRef<HTMLDivElement>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -170,9 +178,9 @@ export function TerminalStage() {
         <div className="landing-header-meta">
           <Link href="/explore">Explore</Link>
           <Link href="/marketplaces">Marketplaces</Link>
+          <Link href="/free-ai">Free AI</Link>
           <Link href="/learn">Learn</Link>
           <Link href="/stack">My Stack</Link>
-          <a href="https://github.com/patty-png/claude-code-toolkit-app" target="_blank" rel="noopener noreferrer">GitHub</a>
         </div>
       </header>
 
@@ -186,9 +194,9 @@ export function TerminalStage() {
             commands on every card and a built-in project manager to track your stack.
           </p>
           <div className="hero-stats">
-            <span className="hero-stat"><strong>284</strong> tools</span>
-            <span className="hero-stat"><strong>6</strong> categories</span>
-            <span className="hero-stat"><strong>∞</strong> saves</span>
+            <span className="hero-stat"><strong>{toolCount.toLocaleString()}</strong> tools</span>
+            <span className="hero-stat"><strong>{publisherCount.toLocaleString()}</strong> publishers</span>
+            <span className="hero-stat"><strong>{categoryCount}</strong> categories</span>
           </div>
           <div className="hero-actions">
             <Link href="/explore" className="hero-cta">

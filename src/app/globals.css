@@ -1762,6 +1762,84 @@ h2.serif em { font-style: italic; color: var(--accent); }
   white-space: nowrap;
 }
 
+/* ══════════════════ Free AI Tools ══════════════════ */
+.freeai-cats-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--rule);
+}
+.freeai-cats-nav .chip { border-bottom: 1px solid var(--rule); cursor: pointer; }
+
+.freeai-section { margin-bottom: 56px; scroll-margin-top: 20px; }
+.freeai-section-head { margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px dashed var(--rule); }
+.freeai-section-head h3 {
+  font-family: var(--font-fraunces), serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 4px;
+  display: flex; align-items: center; gap: 10px;
+}
+.freeai-emoji { font-size: 1.5rem; }
+.freeai-section-head p { color: var(--muted); font-size: 0.9rem; }
+
+.freeai-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 14px;
+}
+.freeai-card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 18px 20px;
+  color: inherit;
+  border-bottom: 1px solid var(--rule);
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.freeai-card:hover {
+  border-color: var(--accent);
+  border-bottom-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -12px rgba(204,120,92,0.25);
+}
+.freeai-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.freeai-card-head h4 {
+  font-family: var(--font-fraunces), serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.freeai-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.freeai-desc { font-size: 0.92rem; color: var(--ink-2); line-height: 1.5; }
+.freeai-block {
+  padding-top: 10px;
+  border-top: 1px dashed var(--rule);
+}
+.freeai-block-label {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.freeai-block p { font-size: 0.86rem; color: var(--ink-2); line-height: 1.5; }
+.freeai-link {
+  margin-top: auto;
+  padding-top: 8px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.76rem;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+.freeai-link span { color: var(--muted); }
+
 /* ══════════════════ Mobile refinements (<=640px) ══════════════════ */
 @media (max-width: 640px) {
   main { padding: 20px 16px; }
