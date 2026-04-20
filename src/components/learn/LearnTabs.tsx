@@ -102,17 +102,43 @@ function CourseGrid({ courses }: { courses: Course[] }) {
   )
 }
 
+type Resource = { type: 'video' | 'doc' | 'course'; url: string; label: string }
+type Task = { text: string; resources?: Resource[] }
+
 function Roadmap() {
-  const phases = [
+  const phases: { num: string; title: string; duration: string; tasks: Task[] }[] = [
     {
       num: '01',
       title: 'Foundation',
       duration: 'Days 1–3',
       tasks: [
-        'Install Claude Code CLI, verify first chat',
-        'Write your first CLAUDE.md in a real project',
-        'Add Filesystem + GitHub MCPs from the shortlist',
-        'Run through 2 videos from the Beginner track',
+        {
+          text: 'Install Claude Code CLI, verify first chat',
+          resources: [
+            { type: 'doc', url: 'https://docs.claude.com/en/docs/claude-code/overview', label: 'Official docs' },
+            { type: 'video', url: 'https://www.youtube.com/watch?v=AJpK3YTTKZ4', label: 'Anthropic walkthrough' },
+          ],
+        },
+        {
+          text: 'Write your first CLAUDE.md in a real project',
+          resources: [
+            { type: 'doc', url: 'https://docs.claude.com/en/docs/claude-code/memory', label: 'Memory files docs' },
+            { type: 'video', url: 'https://www.youtube.com/watch?v=mdMQdNaJU2w', label: 'CLAUDE.md deep dive' },
+          ],
+        },
+        {
+          text: 'Add Filesystem + GitHub MCPs from the shortlist',
+          resources: [
+            { type: 'doc', url: 'https://docs.claude.com/en/docs/claude-code/mcp', label: 'MCP setup docs' },
+            { type: 'video', url: 'https://www.youtube.com/watch?v=kQmXtrmQ5Zg', label: 'MCP servers explained' },
+          ],
+        },
+        {
+          text: 'Complete the beginner tutorial',
+          resources: [
+            { type: 'course', url: 'https://docs.claude.com/en/docs/claude-code/tutorials', label: 'Official tutorials' },
+          ],
+        },
       ],
     },
     {
@@ -120,10 +146,33 @@ function Roadmap() {
       title: 'Customization',
       duration: 'Days 4–7',
       tasks: [
-        'Create your first /skill for a repeated task',
-        'Add 2 category-specific MCPs (database, design, etc.)',
-        'Configure a pre-tool-use hook for safety',
-        'Set up subagents for a multi-file refactor task',
+        {
+          text: 'Create your first /skill for a repeated task',
+          resources: [
+            { type: 'doc', url: 'https://docs.claude.com/en/docs/claude-code/skills', label: 'Skills docs' },
+            { type: 'video', url: 'https://www.youtube.com/watch?v=AJpK3YTTKZ4', label: 'Skills deep dive' },
+          ],
+        },
+        {
+          text: 'Add 2 category-specific MCPs (database, design, etc.)',
+          resources: [
+            { type: 'doc', url: 'https://github.com/modelcontextprotocol/servers', label: 'Official MCP servers' },
+          ],
+        },
+        {
+          text: 'Configure a pre-tool-use hook for safety',
+          resources: [
+            { type: 'doc', url: 'https://docs.claude.com/en/docs/claude-code/hooks', label: 'Hooks docs' },
+            { type: 'video', url: 'https://www.youtube.com/watch?v=fmvEmMPUkyo', label: 'Hooks tutorial' },
+          ],
+        },
+        {
+          text: 'Set up subagents for multi-file refactors',
+          resources: [
+            { type: 'doc', url: 'https://docs.claude.com/en/docs/claude-code/sub-agents', label: 'Subagents docs' },
+            { type: 'video', url: 'https://www.youtube.com/watch?v=rJ8i-PN9xuU', label: 'Subagents walkthrough' },
+          ],
+        },
       ],
     },
     {
@@ -131,10 +180,29 @@ function Roadmap() {
       title: 'Scale',
       duration: 'Week 2',
       tasks: [
-        'Build a custom MCP server for your workflow',
-        'Install a plugin marketplace (Linear, Notion, etc.)',
-        'Save your stack to My Stack with credentials',
-        'Audit: remove unused MCPs, document what you kept',
+        {
+          text: 'Build a custom MCP server for your workflow',
+          resources: [
+            { type: 'doc', url: 'https://modelcontextprotocol.io/docs/tutorials/building-mcp-with-llms', label: 'Build your own MCP' },
+            { type: 'course', url: 'https://www.deeplearning.ai/short-courses/building-agents-with-model-context-protocol/', label: 'DeepLearning.AI course' },
+          ],
+        },
+        {
+          text: 'Install a plugin marketplace',
+          resources: [
+            { type: 'doc', url: 'https://docs.claude.com/en/docs/claude-code/plugins', label: 'Plugins docs' },
+            { type: 'video', url: 'https://www.youtube.com/watch?v=gDr_FBw9YSk', label: 'Plugins walkthrough' },
+          ],
+        },
+        {
+          text: 'Save your stack with credentials',
+          resources: [
+            { type: 'doc', url: '/stack', label: 'My Stack →' },
+          ],
+        },
+        {
+          text: 'Audit: remove unused MCPs, document what you kept',
+        },
       ],
     },
     {
@@ -142,13 +210,29 @@ function Roadmap() {
       title: 'Mastery',
       duration: 'Ongoing',
       tasks: [
-        'Subscribe to Anthropic release notes + 1 newsletter',
-        'Review tools quarterly — add 3, remove 3',
-        'Contribute back: publish a skill or MCP',
-        'Share your setup with a teammate',
+        {
+          text: 'Subscribe to Anthropic release notes',
+          resources: [
+            { type: 'doc', url: 'https://docs.claude.com/en/release-notes/claude-code', label: 'Release notes' },
+          ],
+        },
+        {
+          text: 'Review tools quarterly — add 3, remove 3',
+        },
+        {
+          text: 'Publish your own skill or MCP',
+          resources: [
+            { type: 'doc', url: 'https://github.com/anthropics/claude-code-sdk-python', label: 'Claude Code SDK' },
+          ],
+        },
+        {
+          text: 'Teach a teammate — share your setup',
+        },
       ],
     },
   ]
+
+  const iconFor = (type: Resource['type']) => type === 'video' ? '▶' : type === 'course' ? '◉' : '📄'
 
   return (
     <div className="roadmap">
@@ -162,7 +246,27 @@ function Roadmap() {
             </div>
           </div>
           <ul className="phase-tasks">
-            {p.tasks.map((t) => <li key={t}>{t}</li>)}
+            {p.tasks.map((t, i) => (
+              <li key={i}>
+                <span className="task-text">{t.text}</span>
+                {t.resources && (
+                  <div className="task-resources">
+                    {t.resources.map((r, j) => (
+                      <a
+                        key={j}
+                        href={r.url}
+                        target={r.url.startsWith('http') ? '_blank' : undefined}
+                        rel={r.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+                        className="task-resource"
+                      >
+                        <span className="task-resource-icon">{iconFor(r.type)}</span>
+                        {r.label}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </li>
+            ))}
           </ul>
         </div>
       ))}

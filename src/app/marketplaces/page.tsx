@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { Header } from '@/components/Header'
 
 export const revalidate = 60
 export const dynamic = 'force-dynamic'
@@ -60,17 +61,7 @@ export default async function MarketplacesPage() {
 
   return (
     <div className="view-app">
-      <header className="app-topbar">
-        <div className="app-topbar-inner">
-          <Link href="/" className="app-home">← Home</Link>
-          <div className="app-title">Claude Code <em>Toolkit</em></div>
-          <nav style={{ display: 'flex', gap: 16, fontSize: '0.82rem' }}>
-            <Link href="/explore" className="app-home">Explore</Link>
-            <Link href="/learn" className="app-home">Learn</Link>
-            <Link href="/stack" className="app-home">My Stack</Link>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       <main>
         <div className="section-head">

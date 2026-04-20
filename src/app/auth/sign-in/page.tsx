@@ -1,18 +1,12 @@
 import { SignInForm } from '@/components/stack/SignInForm'
-import Link from 'next/link'
+import { Header } from '@/components/Header'
 
 export const metadata = { title: 'Sign in · Claude Code Toolkit' }
 
 export default function SignInPage() {
   return (
     <div className="view-app">
-      <header className="app-topbar">
-        <div className="app-topbar-inner">
-          <Link href="/" className="app-home">← Home</Link>
-          <div className="app-title">Sign <em>in</em></div>
-          <div style={{ width: 60 }} />
-        </div>
-      </header>
+      <Header />
 
       <main style={{ maxWidth: 420, paddingTop: 64 }}>
         <div className="section-head">

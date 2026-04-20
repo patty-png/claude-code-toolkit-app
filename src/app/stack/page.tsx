@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { StackView } from '@/components/stack/StackView'
+import { Header } from '@/components/Header'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
@@ -48,19 +49,12 @@ export default async function StackPage({ searchParams }: { searchParams: Promis
 
   return (
     <div className="view-app">
-      <header className="app-topbar">
-        <div className="app-topbar-inner">
-          <Link href="/" className="app-home">← Home</Link>
-          <div className="app-title">My <em>Stack</em></div>
-          <nav style={{ display: 'flex', gap: 16, fontSize: '0.82rem', alignItems: 'center' }}>
-            <Link href="/explore" className="app-home">Explore</Link>
-            <Link href="/learn" className="app-home">Learn</Link>
-            <span className="user-badge">
-              {profileRes.data?.display_name ?? profileRes.data?.username ?? user.email}
-            </span>
-          </nav>
-        </div>
-      </header>
+      <Header />
+      <div style={{ maxWidth: 1240, margin: '0 auto', padding: '12px 32px 0', display: 'flex', justifyContent: 'flex-end' }}>
+        <span className="user-badge">
+          {profileRes.data?.display_name ?? profileRes.data?.username ?? user.email}
+        </span>
+      </div>
 
       <main>
         <StackView

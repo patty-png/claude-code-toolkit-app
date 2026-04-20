@@ -20,18 +20,20 @@ export function ExploreView({
   initialTools,
   categories,
   totalCount,
+  fixedCategory,
 }: {
   initialTools: Tool[]
   categories: Category[]
   totalCount: number
+  fixedCategory?: string
 }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  // URL-synced state
+  // URL-synced state (fixedCategory overrides user-chosen cat)
   const [query, setQuery] = useState(searchParams.get('q') ?? '')
-  const [cat, setCat] = useState(searchParams.get('cat') ?? 'all')
+  const [cat, setCat] = useState(fixedCategory ?? searchParams.get('cat') ?? 'all')
   const [sort, setSort] = useState<SortKey>((searchParams.get('sort') as SortKey) ?? 'stars')
 
   // Debounce query so we don't re-query on every keystroke
@@ -133,25 +135,27 @@ export function ExploreView({
           </div>
 
           <div className="filter-row">
-            <div className="chips">
-              <button
-                className={`chip ${cat === 'all' ? 'active' : ''}`}
-                onClick={() => setCat('all')}
-                type="button"
-              >
-                All
-              </button>
-              {categories.map((c) => (
+            {!fixedCategory && categories.length > 0 && (
+              <div className="chips">
                 <button
-                  key={c.id}
-                  className={`chip ${cat === c.id ? 'active' : ''}`}
-                  onClick={() => setCat(c.id)}
+                  className={`chip ${cat === 'all' ? 'active' : ''}`}
+                  onClick={() => setCat('all')}
                   type="button"
                 >
-                  {c.short_label ?? c.label}
+                  All
                 </button>
-              ))}
-            </div>
+                {categories.map((c) => (
+                  <button
+                    key={c.id}
+                    className={`chip ${cat === c.id ? 'active' : ''}`}
+                    onClick={() => setCat(c.id)}
+                    type="button"
+                  >
+                    {c.short_label ?? c.label}
+                  </button>
+                ))}
+              </div>
+            )}
 
             {!debouncedQuery && (
               <div className="sort-select">

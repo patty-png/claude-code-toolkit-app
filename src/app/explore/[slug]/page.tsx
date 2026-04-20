@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { Header } from '@/components/Header'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
@@ -111,16 +112,7 @@ export default async function ToolDetailPage({ params }: RouteProps) {
 
   return (
     <div className="view-app">
-      <header className="app-topbar">
-        <div className="app-topbar-inner">
-          <Link href="/" className="app-home">← Home</Link>
-          <div className="app-title">Claude Code <em>Toolkit</em></div>
-          <nav style={{ display: 'flex', gap: 16, fontSize: '0.82rem' }}>
-            <Link href="/explore" className="app-home">Explore</Link>
-            <Link href="/stack" className="app-home">My Stack</Link>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       <main className="detail-main">
         <nav className="detail-breadcrumb">
