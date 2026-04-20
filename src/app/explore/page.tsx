@@ -24,8 +24,12 @@ export default async function ExplorePage() {
   ])
 
   const tools = toolsRes.data ?? []
-  const categories = catsRes.data ?? []
+  const allCategories = catsRes.data ?? []
   const featured = featuredRes.data ?? []
+
+  // Hide empty categories from chip bar (Research + Learning have no tools yet)
+  const activeCategoryIds = new Set(tools.map(t => t.category_id).filter(Boolean))
+  const categories = allCategories.filter(c => activeCategoryIds.has(c.id))
 
   return (
     <div className="view-app">

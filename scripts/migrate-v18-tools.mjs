@@ -30,26 +30,42 @@ const V18_TOOLS = sandbox.TOOLS
 
 console.log(`→ Parsed ${V18_TOOLS.length} tools from v18`)
 
-// v18 categories → our seeded category ids
+// v18 granular categories → our 8 seeded category ids
 const CAT_MAP = {
+  // MCPs (any flavor)
   'official-mcp': 'mcp',
   'community-mcp': 'mcp',
-  mcp: 'mcp',
-  skill: 'skill',
-  skills: 'skill',
-  agent: 'agent',
-  agents: 'agent',
-  auto: 'auto',
-  hooks: 'auto',
-  tool: 'tool',
-  tools: 'tool',
-  editors: 'tool',
-  saas: 'saas',
-  web: 'saas',
-  res: 'res',
-  research: 'res',
-  learn: 'learn',
-  learning: 'learn',
+  'browser-mcp': 'mcp',
+  'db-mcp': 'mcp',
+  'devops-mcp': 'mcp',
+  'mcp': 'mcp',
+  // Skills
+  'skill': 'skill',
+  // Agents / subagents / multi-agent frameworks / companions
+  'subagent': 'agent',
+  'framework': 'agent',
+  'companion': 'agent',
+  'agent': 'agent',
+  // Hooks & observability
+  'hook': 'auto',
+  'obs': 'auto',
+  'usage': 'auto',
+  'marketplace': 'auto',
+  'auto': 'auto',
+  // Editors & local tooling
+  'terminal': 'tool',
+  'local': 'tool',
+  'knowledge': 'tool',
+  'tool': 'tool',
+  // SaaS / web
+  'saas': 'saas',
+  // Research (nothing in v18 yet, reserved)
+  'res': 'res',
+  'research': 'res',
+  // Learning (reserved for Phase 4)
+  'learn': 'learn',
+  // Custom (user-added via My Stack) — bucket into tools
+  'custom': 'tool',
 }
 
 const slugify = (s) =>
