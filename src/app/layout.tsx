@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Fraunces, IBM_Plex_Sans, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { QueryProvider } from '@/components/QueryProvider'
 import './globals.css'
 
 const fraunces = Fraunces({
@@ -24,7 +25,7 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: 'Claude Code Toolkit',
-  description: '284+ curated MCPs, skills, agents, and SaaS tools for Claude Code — searchable, with one-line install commands.',
+  description: '2,400+ curated MCPs, skills, agents, and SaaS tools for Claude Code — searchable, with one-line install commands.',
   openGraph: {
     title: 'Claude Code Toolkit',
     description: 'The definitive directory for Claude Code power users.',
@@ -36,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${fraunces.variable} ${plex.variable} ${mono.variable}`}>
       <body>
-        {children}
+        <QueryProvider>{children}</QueryProvider>
         <Analytics />
       </body>
     </html>
