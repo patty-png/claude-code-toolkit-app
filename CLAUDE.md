@@ -24,6 +24,30 @@ Do not deviate from ARCHITECTURE.md without asking first.
 6. **No shadcn/ui.** Build primitives in `src/components/ui/` to keep the editorial aesthetic.
 7. **Never commit `.env.local`.** It's gitignored — verify before every push.
 
+## 🚨 FORBIDDEN COMMANDS
+
+**Never run these on this repo — they destroy history or overwrite user work:**
+
+```bash
+git push --force            # rewrites remote history, loses commits from other sources
+git push -f                 # same thing, shorthand
+git reset --hard origin/X   # throws away all local changes irreversibly
+git reset --hard <sha>      # same, on any target
+git checkout -- .           # discards every unstaged edit in the working tree
+git restore .               # same as above
+git clean -fd               # deletes untracked files + directories (e.g. .env.local gone)
+git branch -D master        # force-delete current branch
+git rebase -i               # interactive — hangs in non-interactive shells and rewrites history
+git commit --amend          # rewrites the last commit; bad on pushed commits
+```
+
+**Why this matters:** this repo is in active development with no branch protection. One destructive command can erase hours of work or push broken code live on Vercel within 30 seconds.
+
+**If you think you need one of these:** stop and ask the user first. There's almost always a non-destructive alternative:
+- Instead of `--force`: use `git revert <sha>` to make a new commit that undoes changes
+- Instead of `reset --hard`: use `git stash` to save work, or `git checkout <file>` for specific files
+- Instead of `--amend` on pushed commits: make a new commit with a `fixup:` prefix
+
 ## Brand palette (Claude Code official)
 
 ```
