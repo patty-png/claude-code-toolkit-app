@@ -22,12 +22,72 @@ export const tools = pgTable('tools', {
   installNotes: text('install_notes'),
   isFeatured: boolean('is_featured').default(false),
   featureRank: integer('feature_rank'),
+  // ── Phase 6 additions ──
+  githubUrl: text('github_url'),
+  githubStars: integer('github_stars').default(0),
+  githubForks: integer('github_forks').default(0),
+  githubLastCommit: timestamp('github_last_commit', { withTimezone: true }),
+  license: text('license'),
+  primaryLanguage: text('primary_language'),
+  publisher: text('publisher'),
+  repoName: text('repo_name'),
+  installsCount: integer('installs_count').default(0),
+  upvotes: integer('upvotes').default(0),
+  downvotes: integer('downvotes').default(0),
+  readmeMd: text('readme_md'),
+  skillMd: text('skill_md'),
+  claudeMd: text('claude_md'),
+  source: text('source'),
+  identityKey: text('identity_key'),
+  enrichedAt: timestamp('enriched_at', { withTimezone: true }),
+  lastSeenAt: timestamp('last_seen_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 }, (t) => ({
   categoryIdx: index('tools_category_idx').on(t.categoryId),
   featuredIdx: index('tools_featured_lookup_idx').on(t.isFeatured),
+  starsIdx: index('tools_stars_lookup_idx').on(t.githubStars),
+  publisherIdx: index('tools_publisher_lookup_idx').on(t.publisher),
 }))
+
+export const stagingTools = pgTable('staging_tools', {
+  id: bigserial('id', { mode: 'number' }).primaryKey(),
+  identityKey: text('identity_key').notNull(),
+  name: text('name').notNull(),
+  categoryHint: text('category_hint'),
+  tag: text('tag'),
+  blurb: text('blurb'),
+  url: text('url'),
+  githubUrl: text('github_url'),
+  installCommand: text('install_command'),
+  publisher: text('publisher'),
+  repoName: text('repo_name'),
+  source: text('source').notNull(),
+  raw: jsonb('raw'),
+  status: text('status').default('pending'),
+  reviewedAt: timestamp('reviewed_at', { withTimezone: true }),
+  reviewedBy: uuid('reviewed_by'),
+  notes: text('notes'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+})
+
+export const toolVotes = pgTable('tool_votes', {
+  id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
+  toolId: bigint('tool_id', { mode: 'number' }).references(() => tools.id, { onDelete: 'cascade' }).notNull(),
+  userId: uuid('user_id').notNull(),
+  value: integer('value').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+})
+
+export const toolComments = pgTable('tool_comments', {
+  id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
+  toolId: bigint('tool_id', { mode: 'number' }).references(() => tools.id, { onDelete: 'cascade' }).notNull(),
+  userId: uuid('user_id').notNull(),
+  body: text('body').notNull(),
+  parentId: uuid('parent_id'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
+})
 
 export const tags = pgTable('tags', {
   id: bigserial('id', { mode: 'number' }).primaryKey(),
