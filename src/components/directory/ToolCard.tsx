@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState } from 'react'
 
 export type Tool = {
@@ -105,6 +106,9 @@ export function ToolCard({ tool }: { tool: Tool }) {
             </div>
           )}
           <div className="dir-card-actions">
+            <Link href={`/explore/${tool.slug}`} className="dir-card-link">
+              View details →
+            </Link>
             {tool.github_url && (
               <a href={tool.github_url} target="_blank" rel="noopener noreferrer" className="dir-card-link">
                 GitHub ↗
