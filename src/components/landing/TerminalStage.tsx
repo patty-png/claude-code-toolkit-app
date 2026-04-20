@@ -66,12 +66,62 @@ const DEMOS: Record<string, Segment[]> = {
 }
 
 const NODES = [
-  { key: 'mcp', label: 'MCP', angle: -90 },
-  { key: 'skills', label: 'Skills', angle: -30 },
-  { key: 'subagents', label: 'Subagents', angle: 30 },
-  { key: 'hooks', label: 'Hooks', angle: 90 },
-  { key: 'plugins', label: 'Plugins', angle: 150 },
-  { key: 'claudemd', label: 'CLAUDE.md', angle: 210 },
+  {
+    key: 'mcp', label: 'MCP', desc: 'External tools & data',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4" />
+        <rect x="7" y="7" width="10" height="10" rx="2" />
+      </svg>
+    ),
+  },
+  {
+    key: 'skills', label: 'Skills', desc: 'Reusable instruction sets',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M13 2L3 14h7l-1 8 10-12h-7z" />
+      </svg>
+    ),
+  },
+  {
+    key: 'subagents', label: 'Subagents', desc: 'Parallel specialists',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="2" />
+        <circle cx="12" cy="4" r="1.8" />
+        <circle cx="12" cy="20" r="1.8" />
+        <circle cx="4" cy="12" r="1.8" />
+        <circle cx="20" cy="12" r="1.8" />
+        <path d="M12 10V6M12 18v-4M10 12H6M18 12h-4" />
+      </svg>
+    ),
+  },
+  {
+    key: 'hooks', label: 'Hooks', desc: 'Event automation',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M8 3v6a4 4 0 0 0 8 0V6a3 3 0 0 0-6 0" />
+        <path d="M12 13v8" />
+      </svg>
+    ),
+  },
+  {
+    key: 'plugins', label: 'Plugins', desc: 'Bundle-and-share kits',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 2v6H3v4a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-4h-6V2z" />
+      </svg>
+    ),
+  },
+  {
+    key: 'claudemd', label: 'CLAUDE.md', desc: 'Project memory & rules',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <path d="M14 2v6h6M9 13h6M9 17h4" />
+      </svg>
+    ),
+  },
 ]
 
 export function TerminalStage() {
@@ -117,68 +167,77 @@ export function TerminalStage() {
           <span className="brand-mark">&gt;_</span>
           <span>Claude Code Toolkit</span>
         </div>
-        <nav className="landing-nav">
+        <div className="landing-header-meta">
           <Link href="/explore">Explore</Link>
           <Link href="/learn">Learn</Link>
           <Link href="/stack">My Stack</Link>
-        </nav>
+          <a href="https://github.com/patty-png/claude-code-toolkit-app" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
       </header>
 
-      <div className="landing-stage-wrap">
-        <div className="landing-stage">
-          <svg className="connections" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-            {NODES.map((n) => {
-              const r = 44
-              const rad = (n.angle * Math.PI) / 180
-              const x2 = 50 + Math.cos(rad) * r
-              const y2 = 50 + Math.sin(rad) * r
-              return (
-                <line
-                  key={n.key}
-                  className={`line ${active === n.key ? 'active' : ''}`}
-                  x1="50" y1="50" x2={x2} y2={y2}
-                />
-              )
-            })}
-          </svg>
-
-          <div className="orbit">
-            {NODES.map((n) => (
-              <button
-                key={n.key}
-                type="button"
-                className={`node ${active === n.key ? 'active' : ''}`}
-                style={{ ['--a' as string]: `${n.angle}deg`, ['--r' as string]: '44%' }}
-                onClick={() => setActive(n.key)}
-                aria-label={`${n.label} demo`}
-              >
-                <span className="node-label">{n.label}</span>
-              </button>
-            ))}
+      <div className="landing-hero">
+        {/* LEFT: editorial */}
+        <div className="hero-copy">
+          <div className="hero-kicker"><span className="pulse"></span> A curated command deck</div>
+          <h1>Every Claude Code tool, <em>in one place.</em></h1>
+          <p className="lede">
+            A searchable directory of MCPs, skills, subagents, hooks, plugins, and SaaS integrations — with install
+            commands on every card and a built-in project manager to track your stack.
+          </p>
+          <div className="hero-stats">
+            <span className="hero-stat"><strong>284</strong> tools</span>
+            <span className="hero-stat"><strong>6</strong> categories</span>
+            <span className="hero-stat"><strong>∞</strong> saves</span>
           </div>
-
-          <div className="terminal">
-            <div className="terminal-bar">
-              <span className="dot red"></span>
-              <span className="dot yellow"></span>
-              <span className="dot green"></span>
-              <span className="term-title">claude-code</span>
-            </div>
-            <div className="terminal-body" ref={bodyRef} aria-live="polite" />
+          <div className="hero-actions">
+            <Link href="/explore" className="hero-cta">
+              Explore the stack <span className="arrow">→</span>
+            </Link>
+            <a className="hero-ghost" href="https://github.com/patty-png/claude-code-toolkit-app" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+                <path d="M12 .5C5.73.5.75 5.48.75 11.75c0 4.95 3.2 9.14 7.64 10.62.56.1.77-.24.77-.54v-2.1c-3.11.68-3.76-1.33-3.76-1.33-.5-1.3-1.24-1.65-1.24-1.65-1.02-.7.08-.68.08-.68 1.13.08 1.72 1.16 1.72 1.16 1 1.72 2.63 1.22 3.27.93.1-.73.4-1.22.72-1.5-2.48-.28-5.09-1.24-5.09-5.52 0-1.22.44-2.22 1.16-3.01-.12-.28-.5-1.43.11-2.98 0 0 .94-.3 3.08 1.15.9-.25 1.86-.37 2.82-.38.96.01 1.93.13 2.82.38 2.14-1.45 3.08-1.15 3.08-1.15.61 1.55.23 2.7.11 2.98.72.79 1.16 1.79 1.16 3.01 0 4.29-2.61 5.24-5.1 5.51.4.35.76 1.03.76 2.08v3.08c0 .3.2.65.78.54 4.43-1.48 7.63-5.67 7.63-10.62C23.25 5.48 18.27.5 12 .5z" />
+              </svg>
+              View on GitHub
+            </a>
           </div>
         </div>
-      </div>
 
-      <div className="landing-cta-wrap">
-        <h1 className="display">Your Claude Code <em>command deck.</em></h1>
-        <p className="lede">
-          284 curated MCPs, skills, agents, and SaaS integrations — searchable, with one-line install commands.
-          Save your stack, track credentials per project, access from anywhere.
-        </p>
-        <Link href="/explore" className="hero-cta">
-          Explore the stack <span className="arrow">→</span>
-        </Link>
-        <div className="landing-hint">Click any node above to see it in action</div>
+        {/* RIGHT: stack card + inline terminal */}
+        <div className="hero-visual">
+          <div className="stack-card">
+            <div className="stack-card-head">
+              <span>Building blocks</span>
+              <span className="hint">↓ click to preview</span>
+            </div>
+            <div className="stack-list">
+              {NODES.map((n) => (
+                <button
+                  key={n.key}
+                  type="button"
+                  className={`node ${active === n.key ? 'active' : ''}`}
+                  onClick={() => setActive(n.key)}
+                  aria-label={`${n.label} demo`}
+                >
+                  <span className="node-icon">{n.icon}</span>
+                  <span className="node-text">
+                    <span className="node-label">{n.label}</span>
+                    <span className="node-desc">{n.desc}</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            <div className="terminal">
+              <div className="terminal-bar">
+                <span className="dot red"></span>
+                <span className="dot yellow"></span>
+                <span className="dot green"></span>
+                <span className="term-title">claude-code</span>
+              </div>
+              <div className="terminal-body" ref={bodyRef} aria-live="polite" />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
