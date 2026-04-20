@@ -119,7 +119,8 @@ export function TerminalStage() {
         </div>
         <nav className="landing-nav">
           <Link href="/explore">Explore</Link>
-          <a href="https://github.com/patty-png/claude-code-toolkit-app" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <Link href="/learn">Learn</Link>
+          <Link href="/stack">My Stack</Link>
         </nav>
       </header>
 

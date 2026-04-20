@@ -39,7 +39,10 @@ export default async function ExplorePage() {
           <div className="app-title">
             Claude Code <em>Toolkit</em>
           </div>
-          <div style={{ width: 60 }} />
+          <nav style={{ display: 'flex', gap: 16, fontSize: '0.82rem' }}>
+            <Link href="/learn" className="app-home">Learn</Link>
+            <Link href="/stack" className="app-home">My Stack</Link>
+          </nav>
         </div>
       </header>
 
