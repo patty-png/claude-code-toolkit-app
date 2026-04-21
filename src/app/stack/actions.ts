@@ -38,13 +38,23 @@ export async function addToolToProject(projectId: string, toolId: number) {
   revalidatePath('/stack')
 }
 
-export async function addCustomTool(projectId: string, name: string, url: string | null) {
+export async function addCustomTool(
+  projectId: string,
+  name: string,
+  url: string | null,
+  meta?: { blurb?: string | null; source?: string; source_id?: number }
+) {
   const { supabase } = await requireUser()
+  const fields: Record<string, any> = {}
+  if (meta?.blurb) fields.__blurb = meta.blurb
+  if (meta?.source) fields.__source = meta.source
+  if (meta?.source_id) fields.__source_id = meta.source_id
+
   await supabase.from('stack_items').insert({
     project_id: projectId,
     custom_tool_name: name,
     custom_tool_url: url,
-    fields: {},
+    fields,
   })
   revalidatePath('/stack')
 }

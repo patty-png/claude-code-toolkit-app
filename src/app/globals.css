@@ -1178,7 +1178,19 @@ h2.serif em { font-style: italic; color: var(--accent); }
   background: var(--paper); font-family: inherit; font-size: 0.88rem;
 }
 .add-tool-head input:focus { outline: none; border-color: var(--accent); }
-.add-tool-results { max-height: 360px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.add-tool-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--rule);
+}
+.add-tool-chips .chip {
+  font-size: 0.78rem;
+  padding: 5px 12px;
+}
+.add-tool-results { max-height: 440px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
 .add-tool-row {
   display: flex; justify-content: space-between; align-items: center;
   gap: 16px; padding: 10px 12px;

@@ -43,13 +43,14 @@ export function LearnTabs({ resources, courses }: { resources: Resource[]; cours
   const allVideos = useMemo(() => resources.filter(r => r.resource_type === 'video'), [resources])
   const research = useMemo(() => resources.filter(r => r.resource_type === 'research' || r.source_type === 'research_lab'), [resources])
   const featured = useMemo(() => resources.filter(r => r.is_featured).slice(0, 6), [resources])
+  const freeCourses = useMemo(() => courses.filter(c => c.is_free), [courses])
 
   const TABS: { key: Tab; label: string; count?: number }[] = [
     { key: 'overview', label: 'Overview' },
     { key: 'anthropic', label: 'Anthropic', count: anthropic.length },
     { key: 'creators', label: 'Creators', count: creators.length },
     { key: 'videos', label: 'Videos', count: allVideos.length },
-    { key: 'courses', label: 'Courses', count: courses.length },
+    { key: 'courses', label: 'Free Courses', count: freeCourses.length },
     { key: 'research', label: 'Research', count: research.length },
     { key: 'roadmap', label: 'Roadmap' },
   ]
@@ -73,7 +74,7 @@ export function LearnTabs({ resources, courses }: { resources: Resource[]; cours
       {tab === 'anthropic' && <AnthropicSection items={anthropic} />}
       {tab === 'creators' && <CreatorsSection items={creators} />}
       {tab === 'videos' && <VideoGrid items={allVideos} />}
-      {tab === 'courses' && <CourseGrid courses={courses} />}
+      {tab === 'courses' && <CourseGrid courses={freeCourses} />}
       {tab === 'research' && <ResearchSection items={research} />}
       {tab === 'roadmap' && <Roadmap />}
     </>

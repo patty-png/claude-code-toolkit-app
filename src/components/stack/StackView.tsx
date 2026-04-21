@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
@@ -12,6 +12,30 @@ import {
   updateFields,
   signOut,
 } from '@/app/stack/actions'
+
+type PickerItem = {
+  source: 'tools' | 'free_ai'
+  id: number
+  name: string
+  blurb: string
+  url: string | null
+  category_id: string | null
+  tag: string | null
+  publisher: string | null
+  github_stars: number | null
+  install_command: string | null
+}
+
+const CATEGORIES: { id: string; label: string }[] = [
+  { id: 'all',     label: 'All' },
+  { id: 'mcp',     label: 'MCP' },
+  { id: 'skill',   label: 'Skills' },
+  { id: 'agent',   label: 'Agents' },
+  { id: 'auto',    label: 'Hooks' },
+  { id: 'tool',    label: 'Editors' },
+  { id: 'saas',    label: 'SaaS' },
+  { id: 'free_ai', label: 'Free AI' },
+]
 
 type Project = { id: string; name: string; description: string | null; created_at: string | null }
 type Tool = { id: number; name: string; tag: string | null; blurb: string; url?: string | null; install_command?: string | null; category_id: string | null }
@@ -49,19 +73,63 @@ export function StackView({
   const [showNew, setShowNew] = useState(projects.length === 0)
   const [showAdd, setShowAdd] = useState(false)
   const [query, setQuery] = useState('')
+  const [debouncedQuery, setDebouncedQuery] = useState('')
+  const [pickerCat, setPickerCat] = useState('all')
+  const [pickerItems, setPickerItems] = useState<PickerItem[]>([])
+  const [loading, setLoading] = useState(false)
   const [, startTransition] = useTransition()
   const router = useRouter()
 
   const activeProject = projects.find(p => p.id === activeId) ?? null
 
-  const filteredTools = query
-    ? allTools.filter(t =>
-        t.name.toLowerCase().includes(query.toLowerCase()) ||
-        t.blurb.toLowerCase().includes(query.toLowerCase())
-      ).slice(0, 30)
-    : allTools.slice(0, 30)
+  // Debounce search input
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(query), 220)
+    return () => clearTimeout(t)
+  }, [query])
 
-  const usedToolIds = new Set(items.map(i => i.tool_id).filter(Boolean))
+  // Fetch picker results when open + filter/query changes
+  useEffect(() => {
+    if (!showAdd) return
+    const abort = new AbortController()
+    setLoading(true)
+    const url = new URL('/api/stack-picker', window.location.origin)
+    if (debouncedQuery) url.searchParams.set('q', debouncedQuery)
+    if (pickerCat && pickerCat !== 'all') url.searchParams.set('cat', pickerCat)
+    url.searchParams.set('limit', '40')
+    fetch(url, { signal: abort.signal })
+      .then((r) => r.json())
+      .then((d) => setPickerItems(d.items ?? []))
+      .catch(() => {})
+      .finally(() => setLoading(false))
+    return () => abort.abort()
+  }, [showAdd, debouncedQuery, pickerCat])
+
+  // Track already-added identifiers (compound key so free_ai + tools don't collide)
+  const addedKey = (s: 'tools' | 'free_ai', id: number) => `${s}:${id}`
+  const usedKeys = new Set<string>()
+  items.forEach((i) => {
+    if (i.tool_id) usedKeys.add(addedKey('tools', i.tool_id))
+    const src = (i.fields as any)?.__source
+    const sid = (i.fields as any)?.__source_id
+    if (src === 'free_ai' && sid) usedKeys.add(addedKey('free_ai', sid))
+  })
+
+  const handleAdd = (p: PickerItem) => {
+    if (!activeProject) return
+    startTransition(async () => {
+      if (p.source === 'tools') {
+        await addToolToProject(activeProject.id, p.id)
+      } else {
+        await addCustomTool(activeProject.id, p.name, p.url, {
+          blurb: p.blurb,
+          source: 'free_ai',
+          source_id: p.id,
+        })
+      }
+      router.refresh()
+    })
+  }
 
   return (
     <div className="stack-layout">
@@ -145,21 +213,53 @@ export function StackView({
                 <div className="add-tool-head">
                   <input
                     type="text"
-                    placeholder="Search tools…"
+                    placeholder="Search everything — tools, skills, MCPs, free AI…"
                     value={query}
                     onChange={e => setQuery(e.target.value)}
                     autoFocus
                   />
-                  <button type="button" className="btn-ghost" onClick={() => { setShowAdd(false); setQuery('') }}>Done</button>
+                  <button type="button" className="btn-ghost" onClick={() => { setShowAdd(false); setQuery(''); setPickerCat('all') }}>Done</button>
                 </div>
+
+                <div className="add-tool-chips">
+                  {CATEGORIES.map((c) => (
+                    <button
+                      key={c.id}
+                      type="button"
+                      className={`chip ${pickerCat === c.id ? 'active' : ''}`}
+                      onClick={() => setPickerCat(c.id)}
+                    >
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+
                 <div className="add-tool-results">
-                  {filteredTools.map(t => {
-                    const already = usedToolIds.has(t.id)
+                  {loading && pickerItems.length === 0 && (
+                    <div className="row" style={{ padding: 16, color: 'var(--muted)' }}>Searching…</div>
+                  )}
+                  {!loading && pickerItems.length === 0 && (
+                    <div className="row" style={{ padding: 16, color: 'var(--muted)' }}>
+                      No matches. Try a shorter search or different category.
+                    </div>
+                  )}
+                  {pickerItems.map(p => {
+                    const already = usedKeys.has(addedKey(p.source, p.id))
+                    const sourceBadge = p.source === 'free_ai' ? 'Free AI' : (p.tag || p.category_id || 'Tool')
                     return (
-                      <div key={t.id} className={`add-tool-row ${already ? 'already' : ''}`}>
-                        <div>
-                          <strong>{t.name}</strong>{t.tag && <span className="row-tag">{t.tag}</span>}
-                          <p>{t.blurb}</p>
+                      <div key={`${p.source}:${p.id}`} className={`add-tool-row ${already ? 'already' : ''}`}>
+                        <div style={{ minWidth: 0, flex: 1 }}>
+                          <div>
+                            <strong>{p.name}</strong>
+                            <span className="row-tag">{sourceBadge}</span>
+                            {p.github_stars !== null && p.github_stars > 0 && (
+                              <span className="row-tag" style={{ marginLeft: 4, color: 'var(--accent-ink)' }}>
+                                ★ {p.github_stars >= 1000 ? `${(p.github_stars / 1000).toFixed(p.github_stars >= 10_000 ? 0 : 1)}k` : p.github_stars}
+                              </span>
+                            )}
+                          </div>
+                          {p.publisher && <div style={{ fontFamily: 'var(--font-mono), monospace', fontSize: '0.68rem', color: 'var(--muted)', marginTop: 2 }}>{p.publisher}</div>}
+                          <p>{p.blurb}</p>
                         </div>
                         {already ? (
                           <span className="row-status">✓ Added</span>
@@ -167,7 +267,7 @@ export function StackView({
                           <button
                             type="button"
                             className="btn-primary"
-                            onClick={() => startTransition(async () => { await addToolToProject(activeProject.id, t.id); router.refresh() })}
+                            onClick={() => handleAdd(p)}
                           >
                             + Add
                           </button>
@@ -207,6 +307,13 @@ export function StackView({
 }
 
 function StackItemRow({ item, name, url }: { item: StackItem; name: string; url: string | null }) {
+  // Blurb: from linked tool, or from fields.__blurb (set when added as free AI custom)
+  const blurb: string | null = item.tool?.blurb ?? (item.fields as any)?.__blurb ?? null
+  const sourceBadge = item.tool
+    ? (item.tool.tag ?? item.tool.category_id ?? 'Tool')
+    : (item.fields as any)?.__source === 'free_ai'
+      ? 'Free AI'
+      : 'Custom'
   const [fields, setFields] = useState(item.fields ?? {})
   const [, startTransition] = useTransition()
   const router = useRouter()
@@ -220,9 +327,12 @@ function StackItemRow({ item, name, url }: { item: StackItem; name: string; url:
   return (
     <article className="stack-item">
       <header className="stack-item-head">
-        <div>
-          <h3 className="stack-item-name">{name}</h3>
-          {item.tool?.blurb && <p className="stack-item-blurb">{item.tool.blurb}</p>}
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <h3 className="stack-item-name">
+            {name}
+            <span className="row-tag" style={{ marginLeft: 8, fontSize: '0.62rem' }}>{sourceBadge}</span>
+          </h3>
+          {blurb && <p className="stack-item-blurb">{blurb}</p>}
         </div>
         <div className="stack-item-actions">
           {url && <a href={url} target="_blank" rel="noopener noreferrer" className="stack-item-link">↗</a>}
