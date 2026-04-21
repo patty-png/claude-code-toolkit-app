@@ -22,6 +22,7 @@ type Tool = {
   category: string
   is_free: boolean
   has_free_tier: boolean
+  is_best?: boolean | null
 }
 
 const CATEGORY_META: Record<string, { label: string; emoji: string; description: string }> = {
@@ -45,6 +46,7 @@ export default async function FreeAIPage() {
     .order('sort_order')
 
   const toolList = (tools ?? []) as Tool[]
+  const bestOf = toolList.filter(t => t.is_best)
 
   // Group by category
   const byCategory: Record<string, Tool[]> = {}
@@ -80,6 +82,30 @@ export default async function FreeAIPage() {
           </div>
         ) : (
           <>
+            {bestOf.length > 0 && (
+              <section className="freeai-best">
+                <div className="freeai-best-head">
+                  <div className="section-num">Best of the web</div>
+                  <h3 className="serif">Editor-curated favorites.</h3>
+                  <p>The tools we reach for most often, across every category.</p>
+                </div>
+                <div className="freeai-grid">
+                  {bestOf.map(t => (
+                    <a key={t.id} href={t.url} target="_blank" rel="noopener noreferrer" className="freeai-card freeai-card-best">
+                      <div className="freeai-card-head">
+                        <h4>{t.name}</h4>
+                        <span className="badge free">Best</span>
+                      </div>
+                      <p className="freeai-desc">{t.description}</p>
+                      <div className="freeai-link">
+                        Open <span>{new URL(t.url).hostname.replace('www.', '')}</span> ↗
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </section>
+            )}
+
             {/* Category anchor nav */}
             <div className="freeai-cats-nav">
               {sortedCategories.map(cat => {

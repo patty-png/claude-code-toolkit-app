@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { ToolCard, ToolCardSkeleton, type Tool } from './ToolCard'
 
 type Category = { id: string; label: string; short_label: string | null; emoji: string | null }
-type Page = { items: Tool[]; nextCursor: string | null; count: number }
+type Page = { items: Tool[]; nextOffset: number | null; count: number; totalInFilter?: number | null }
 
 type SortKey = 'stars' | 'installs' | 'recent' | 'alpha'
 const SORT_LABELS: Record<SortKey, string> = {
@@ -54,13 +54,13 @@ export function ExploreView({
   }, [debouncedQuery, cat, sort, pathname, router])
 
   const fetchPage = useCallback(
-    async ({ pageParam = null as string | null }) => {
+    async ({ pageParam = 0 as number }) => {
       const url = new URL('/api/tools', window.location.origin)
       if (debouncedQuery) url.searchParams.set('q', debouncedQuery)
       if (cat && cat !== 'all') url.searchParams.set('cat', cat)
       url.searchParams.set('sort', sort)
       url.searchParams.set('limit', '50')
-      if (pageParam) url.searchParams.set('cursor', pageParam)
+      url.searchParams.set('offset', String(pageParam))
       const res = await fetch(url)
       if (!res.ok) throw new Error(await res.text())
       return (await res.json()) as Page
@@ -79,11 +79,19 @@ export function ExploreView({
   } = useInfiniteQuery({
     queryKey: ['tools', { q: debouncedQuery, cat, sort }],
     queryFn: fetchPage,
-    initialPageParam: null as string | null,
-    getNextPageParam: (last) => last.nextCursor,
+    initialPageParam: 0 as number,
+    getNextPageParam: (last) => last.nextOffset,
     initialData:
       debouncedQuery === '' && cat === 'all' && sort === 'stars' && initialTools.length > 0
-        ? { pages: [{ items: initialTools, nextCursor: null, count: initialTools.length }], pageParams: [null] }
+        ? {
+            pages: [{
+              items: initialTools,
+              nextOffset: initialTools.length >= 50 ? 50 : null,
+              count: initialTools.length,
+              totalInFilter: totalCount,
+            }],
+            pageParams: [0],
+          }
         : undefined,
   })
 
@@ -97,6 +105,7 @@ export function ExploreView({
   }, [debouncedQuery, cat, sort])
 
   const items = useMemo(() => data?.pages.flatMap((p) => p.items) ?? [], [data])
+  const totalForFilter = data?.pages[0]?.totalInFilter ?? totalCount
 
   // IntersectionObserver for infinite scroll
   const sentinelRef = useRef<HTMLDivElement>(null)
@@ -176,14 +185,23 @@ export function ExploreView({
         <h2 className="serif">
           {isFiltered ? (
             <>
-              {debouncedQuery ? <><em>{items.length}</em> match{items.length === 1 ? '' : 'es'}</> : <>{activeCategory?.label ?? 'All'}</>}
-              {activeCategory && !debouncedQuery && <> — {items.length.toLocaleString()} tools</>}
+              {debouncedQuery ? (
+                <><em>{totalForFilter.toLocaleString()}</em> match{totalForFilter === 1 ? '' : 'es'}</>
+              ) : (
+                <>{activeCategory?.label ?? 'All'}</>
+              )}
+              {activeCategory && !debouncedQuery && <> — {totalForFilter.toLocaleString()} tools</>}
               {debouncedQuery && activeCategory && <> in <em>{activeCategory.label}</em></>}
             </>
           ) : (
-            <>{totalCount.toLocaleString()} tools, <em>categorised.</em></>
+            <>{totalForFilter.toLocaleString()} tools, <em>categorised.</em></>
           )}
         </h2>
+        {items.length > 0 && items.length < totalForFilter && (
+          <p className="section-lede" style={{ marginTop: 4, fontSize: '0.82rem', color: 'var(--muted)' }}>
+            Showing {items.length.toLocaleString()} of {totalForFilter.toLocaleString()} — scroll for more.
+          </p>
+        )}
       </div>
 
       {isLoading ? (

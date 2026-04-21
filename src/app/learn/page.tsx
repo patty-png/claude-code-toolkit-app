@@ -1,14 +1,13 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { LearnTabs } from '@/components/learn/LearnTabs'
 import { Header } from '@/components/Header'
-import Link from 'next/link'
 
-export const revalidate = 300
+export const dynamic = 'force-dynamic'
 
 export default async function LearnPage() {
-  const supabase = await createClient()
-  const [vRes, cRes] = await Promise.all([
-    supabase.from('videos').select('*').order('id'),
+  const supabase = createAdminClient()
+  const [resRes, cRes] = await Promise.all([
+    supabase.from('learn_resources').select('*').order('is_featured', { ascending: false }).order('id', { ascending: true }),
     supabase.from('courses').select('*').order('id'),
   ])
 
@@ -21,12 +20,12 @@ export default async function LearnPage() {
           <div className="section-num">Education</div>
           <h2 className="serif">Get up to speed, <em>fast.</em></h2>
           <p className="section-lede">
-            Curated videos, official courses with certificates, and a 2-week roadmap to go from
-            first install to confident power user.
+            Curated videos from Anthropic + creators, official documentation, research, courses with
+            certificates, and a 2-week roadmap to go from first install to confident power user.
           </p>
         </div>
 
-        <LearnTabs videos={vRes.data ?? []} courses={cRes.data ?? []} />
+        <LearnTabs resources={(resRes.data ?? []) as any} courses={(cRes.data ?? []) as any} />
       </main>
     </div>
   )

@@ -40,7 +40,7 @@ export default async function MarketplacesPage() {
       .from('publisher_stats')
       .select('*')
       .order('tool_count', { ascending: false })
-      .limit(200)
+      .limit(1000)
     publishers = (data as any) ?? []
   } catch {
     // View not created yet — show empty with a hint
