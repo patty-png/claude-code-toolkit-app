@@ -1,7 +1,22 @@
 import { TerminalStage } from '@/components/landing/TerminalStage'
 import { createAdminClient } from '@/lib/supabase/admin'
+import type { Metadata } from 'next'
+import { SITE_URL } from '@/lib/site'
 
 export const revalidate = 300
+
+export const metadata: Metadata = {
+  title: 'Claude Code Stack — 2,435 Tools, Skills, MCPs & Hooks',
+  description: 'The complete directory of tools, skills, MCPs, and hooks for Claude Code. Install commands, reviews, and use cases — all searchable.',
+  alternates: { canonical: SITE_URL },
+  openGraph: {
+    title: 'Claude Code Stack',
+    description: 'The complete directory of tools, skills, MCPs, and hooks for Claude Code.',
+    url: SITE_URL,
+    siteName: 'Claude Code Stack',
+    type: 'website',
+  },
+}
 
 export default async function Home() {
   const supabase = createAdminClient()
