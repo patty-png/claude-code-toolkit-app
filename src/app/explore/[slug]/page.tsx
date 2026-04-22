@@ -3,7 +3,6 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { Header } from '@/components/Header'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import Script from 'next/script'
 import type { Metadata } from 'next'
 import { renderMarkdown, stripMarkdown } from '@/lib/markdown'
 import { SITE_URL } from '@/lib/site'
@@ -149,12 +148,12 @@ export default async function ToolDetailPage({ params }: RouteProps) {
 
   return (
     <div className="view-app">
-      <Script
+      <script
         id="schema-software"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
       />
-      <Script
+      <script
         id="schema-breadcrumb"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}

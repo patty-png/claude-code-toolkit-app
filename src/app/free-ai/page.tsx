@@ -5,7 +5,6 @@ import { Header } from '@/components/Header'
 import { SITE_URL } from '@/lib/site'
 
 export const revalidate = 60
-export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Free AI Tools — Claude Code Stack',
