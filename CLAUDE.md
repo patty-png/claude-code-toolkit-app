@@ -24,6 +24,7 @@ Do not deviate from ARCHITECTURE.md without asking first.
 6. **No shadcn/ui.** Build primitives in `src/components/ui/` to keep the editorial aesthetic.
 7. **Never commit `.env.local`.** It's gitignored — verify before every push.
 8. **Always paste content inline.** When the user needs to copy/paste something (SQL, config, env vars), paste the full content in chat. Never tell them to "open file X and copy the contents" — it's slower and breaks flow.
+9. **Auto-commit and auto-push.** After any logical unit of work (feature, fix, refactor), stage the relevant files, write a conventional commit message, and `git push` without asking. Split into multiple commits if changes span unrelated concerns. Do NOT wait for explicit approval. Exception: destructive ops (force-push, reset --hard, branch deletion) still require confirmation.
 
 ## 🚨 FORBIDDEN COMMANDS
 
