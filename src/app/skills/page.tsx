@@ -7,7 +7,7 @@ import type { Metadata } from 'next'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Claude Code Skills — Toolkit',
+  title: 'Claude Code Skills — Stack',
   description: 'Reusable instructions that teach your agent specific tasks. Install with a single command.',
 }
 

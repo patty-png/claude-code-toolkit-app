@@ -20,7 +20,7 @@ export function Header() {
       <div className="app-topbar-inner">
         <Link href="/" className="app-brand" aria-label="Claude Code Stack home">
           <span className="brand-mark" aria-hidden="true">&gt;_</span>
-          <span className="brand-text">Claude Code <em>Toolkit</em></span>
+          <span className="brand-text">Claude Code <em>Stack</em></span>
         </Link>
         <nav className="app-nav">
           {NAV.map((item) => {
