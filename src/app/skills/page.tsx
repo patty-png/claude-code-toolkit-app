@@ -2,9 +2,10 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { Header } from '@/components/Header'
 import { ExploreView } from '@/components/directory/ExploreView'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Claude Code Skills — Stack',
@@ -152,12 +153,14 @@ export default async function SkillsPage() {
             <div className="section-num">All skills</div>
             <h2 className="serif">{skillCount.toLocaleString()} skills, <em>browse freely.</em></h2>
           </div>
-          <ExploreView
-            initialTools={initialTools}
-            categories={[]}
-            totalCount={skillCount}
-            fixedCategory="skill"
-          />
+          <Suspense fallback={null}>
+            <ExploreView
+              initialTools={initialTools}
+              categories={[]}
+              totalCount={skillCount}
+              fixedCategory="skill"
+            />
+          </Suspense>
         </section>
       </main>
 
