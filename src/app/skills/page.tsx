@@ -12,6 +12,13 @@ export const metadata: Metadata = {
   title: 'Claude Code Skills — Stack',
   description: 'Reusable instructions that teach your agent specific tasks. Install with a single command.',
   alternates: { canonical: `${SITE_URL}/skills` },
+  openGraph: {
+    title: 'Claude Code Skills — Stack',
+    description: 'Reusable instructions that teach your agent specific tasks. Install with a single command.',
+    url: `${SITE_URL}/skills`,
+    siteName: 'Claude Code Stack',
+    type: 'website',
+  },
 }
 
 function compact(n: number | null | undefined): string {

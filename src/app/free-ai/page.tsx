@@ -11,6 +11,13 @@ export const metadata: Metadata = {
   title: 'Free AI Tools — Claude Code Stack',
   description: 'Curated free AI websites — chatbots, image generators, video tools, and more. All with free tiers.',
   alternates: { canonical: `${SITE_URL}/free-ai` },
+  openGraph: {
+    title: 'Free AI Tools — Claude Code Stack',
+    description: 'Curated free AI websites — chatbots, image generators, video tools, and more. All with free tiers.',
+    url: `${SITE_URL}/free-ai`,
+    siteName: 'Claude Code Stack',
+    type: 'website',
+  },
 }
 
 type Tool = {

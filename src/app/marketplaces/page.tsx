@@ -10,6 +10,13 @@ export const metadata: Metadata = {
   title: 'Marketplaces — Claude Code Stack',
   description: 'Publishers and organizations shipping Claude Code tools, skills, and MCPs.',
   alternates: { canonical: `${SITE_URL}/marketplaces` },
+  openGraph: {
+    title: 'Marketplaces — Claude Code Stack',
+    description: 'Publishers and organizations shipping Claude Code tools, skills, and MCPs.',
+    url: `${SITE_URL}/marketplaces`,
+    siteName: 'Claude Code Stack',
+    type: 'website',
+  },
 }
 
 function compact(n: number | null | undefined): string {
