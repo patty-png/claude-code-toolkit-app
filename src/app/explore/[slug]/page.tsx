@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { Header } from '@/components/Header'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Script from 'next/script'
 import type { Metadata } from 'next'
 import { renderMarkdown, stripMarkdown } from '@/lib/markdown'
 import { SITE_URL } from '@/lib/site'
@@ -112,8 +113,52 @@ export default async function ToolDetailPage({ params }: RouteProps) {
   const skillHtml = await renderMarkdown(tool.skill_md ?? '')
   const claudeHtml = await renderMarkdown(tool.claude_md ?? '')
 
+  // JSON-LD structured data
+  const softwareSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: tool.name,
+    description: tool.blurb,
+    applicationCategory: 'DeveloperApplication',
+    operatingSystem: 'Cross-platform',
+    url: `${SITE_URL}/explore/${tool.slug}`,
+    ...(tool.github_stars && tool.github_stars > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: Math.min(5, Math.max(1, Math.log10(tool.github_stars + 1))),
+            ratingCount: Math.max(1, tool.github_stars),
+            bestRating: 5,
+          },
+        }
+      : {}),
+    ...(tool.publisher ? { author: { '@type': 'Person', name: tool.publisher } } : {}),
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Explore', item: `${SITE_URL}/explore` },
+      ...(tool.category_id
+        ? [{ '@type': 'ListItem', position: 2, name: (cat as any)?.label ?? tool.category_id, item: `${SITE_URL}/explore?cat=${tool.category_id}` }]
+        : []),
+      { '@type': 'ListItem', position: tool.category_id ? 3 : 2, name: tool.name, item: `${SITE_URL}/explore/${tool.slug}` },
+    ],
+  }
+
   return (
     <div className="view-app">
+      <Script
+        id="schema-software"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
+      />
+      <Script
+        id="schema-breadcrumb"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <Header />
 
       <main className="detail-main">
