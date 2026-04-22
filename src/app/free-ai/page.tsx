@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { Header } from '@/components/Header'
+import { SITE_URL } from '@/lib/site'
 
 export const revalidate = 60
 export const dynamic = 'force-dynamic'
@@ -9,6 +10,7 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Free AI Tools — Claude Code Stack',
   description: 'Curated free AI websites — chatbots, image generators, video tools, and more. All with free tiers.',
+  alternates: { canonical: `${SITE_URL}/free-ai` },
 }
 
 type Tool = {

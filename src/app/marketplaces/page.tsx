@@ -2,12 +2,14 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { Header } from '@/components/Header'
+import { SITE_URL } from '@/lib/site'
 
 export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Marketplaces — Claude Code Stack',
   description: 'Publishers and organizations shipping Claude Code tools, skills, and MCPs.',
+  alternates: { canonical: `${SITE_URL}/marketplaces` },
 }
 
 function compact(n: number | null | undefined): string {

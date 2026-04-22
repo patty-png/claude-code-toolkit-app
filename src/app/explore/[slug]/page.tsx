@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { renderMarkdown, stripMarkdown } from '@/lib/markdown'
+import { SITE_URL } from '@/lib/site'
 import { VoteButtons } from '@/components/detail/VoteButtons'
 import { AddToStackButton } from '@/components/detail/AddToStackButton'
 import { InstallCommand } from '@/components/detail/InstallCommand'
@@ -57,6 +58,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
   return {
     title: `${title} — Claude Code Stack`,
     description: desc,
+    alternates: { canonical: `${SITE_URL}/explore/${slug}` },
     openGraph: {
       title,
       description: desc,

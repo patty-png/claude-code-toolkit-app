@@ -4,12 +4,14 @@ import { ExploreView } from '@/components/directory/ExploreView'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import type { Metadata } from 'next'
+import { SITE_URL } from '@/lib/site'
 
 export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Claude Code Skills — Stack',
   description: 'Reusable instructions that teach your agent specific tasks. Install with a single command.',
+  alternates: { canonical: `${SITE_URL}/skills` },
 }
 
 function compact(n: number | null | undefined): string {

@@ -1,8 +1,14 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { LearnTabs } from '@/components/learn/LearnTabs'
 import { Header } from '@/components/Header'
+import type { Metadata } from 'next'
+import { SITE_URL } from '@/lib/site'
 
 export const revalidate = 300
+
+export const metadata: Metadata = {
+  alternates: { canonical: `${SITE_URL}/learn` },
+}
 
 export default async function LearnPage() {
   const supabase = createAdminClient()

@@ -3,6 +3,7 @@ import { Header } from '@/components/Header'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { SITE_URL } from '@/lib/site'
 
 export const revalidate = 300
 
@@ -21,6 +22,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
   return {
     title: `${publisher} — Publisher · Claude Code Stack`,
     description: `All Claude Code tools, skills, MCPs, and hooks published by ${publisher}.`,
+    alternates: { canonical: `${SITE_URL}/publisher/${name}` },
   }
 }
 
