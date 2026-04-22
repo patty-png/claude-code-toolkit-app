@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /stack
+Disallow: /auth
+Disallow: /api
+
+Sitemap: https://www.claudecodestack.com/sitemap.xml
