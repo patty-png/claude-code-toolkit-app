@@ -7,7 +7,7 @@ export const revalidate = 60
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Free AI Tools — Claude Code Toolkit',
+  title: 'Free AI Tools — Claude Code Stack',
   description: 'Curated free AI websites — chatbots, image generators, video tools, and more. All with free tiers.',
 }
 

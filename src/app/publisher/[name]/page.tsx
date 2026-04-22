@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
   const { name } = await params
   const publisher = decodeURIComponent(name)
   return {
-    title: `${publisher} — Publisher · Claude Code Toolkit`,
+    title: `${publisher} — Publisher · Claude Code Stack`,
     description: `All Claude Code tools, skills, MCPs, and hooks published by ${publisher}.`,
   }
 }

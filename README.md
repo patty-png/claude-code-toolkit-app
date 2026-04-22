@@ -1,12 +1,12 @@
 <div align="center">
 
-<img src="docs/logo.png" alt="Claude Code Toolkit" width="140" />
+<img src="docs/logo.png" alt="Claude Code Stack" width="140" />
 
-# Claude Code Toolkit
+# Claude Code Stack
 
 **A curated command deck for Claude Code — 284 tools, categorized and installable.**
 
-[![Live](https://img.shields.io/badge/live-claude--code--toolkit--app.vercel.app-cc785c?style=flat-square)](https://claude-code-toolkit-app.vercel.app)
+[![Live](https://img.shields.io/badge/live-www.claudecodestack.com-cc785c?style=flat-square)](https://www.claudecodestack.com)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=nextdotjs)](https://nextjs.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-Postgres-3ecf8e?style=flat-square&logo=supabase)](https://supabase.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
@@ -17,7 +17,7 @@
 <br />
 
 <div align="center">
-  <img src="docs/landing.png" alt="Claude Code Toolkit landing page" width="100%" />
+  <img src="docs/landing.png" alt="Claude Code Stack landing page" width="100%" />
 </div>
 
 <br />

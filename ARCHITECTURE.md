@@ -1,4 +1,4 @@
-# Claude Code Toolkit — Full Stack Architecture
+# Claude Code Stack — Full Stack Architecture
 
 > Source of truth for the deployed cloud version. Sonnet implements against this doc.
 > Last updated: 2026-04-19

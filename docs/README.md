@@ -1,6 +1,6 @@
 # Docs
 
-Reference material and diagrams for the Claude Code Toolkit app.
+Reference material and diagrams for the Claude Code Stack app.
 
 ## Contents
 

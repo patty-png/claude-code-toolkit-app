@@ -18,7 +18,7 @@ export function Header() {
   return (
     <header className="app-topbar">
       <div className="app-topbar-inner">
-        <Link href="/" className="app-brand" aria-label="Claude Code Toolkit home">
+        <Link href="/" className="app-brand" aria-label="Claude Code Stack home">
           <span className="brand-mark" aria-hidden="true">&gt;_</span>
           <span className="brand-text">Claude Code <em>Toolkit</em></span>
         </Link>

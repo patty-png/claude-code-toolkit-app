@@ -7,7 +7,7 @@ export const revalidate = 60
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Marketplaces — Claude Code Toolkit',
+  title: 'Marketplaces — Claude Code Stack',
   description: 'Publishers and organizations shipping Claude Code tools, skills, and MCPs.',
 }
 

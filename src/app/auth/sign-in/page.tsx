@@ -1,7 +1,7 @@
 import { SignInForm } from '@/components/stack/SignInForm'
 import { Header } from '@/components/Header'
 
-export const metadata = { title: 'Sign in · Claude Code Toolkit' }
+export const metadata = { title: 'Sign in · Claude Code Stack' }
 
 export default function SignInPage() {
   return (

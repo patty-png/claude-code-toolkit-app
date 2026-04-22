@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
   const desc = t.blurb || stripMarkdown(t.readme_md || '', 160)
   const title = t.publisher ? `${t.name} · ${t.publisher}` : t.name
   return {
-    title: `${title} — Claude Code Toolkit`,
+    title: `${title} — Claude Code Stack`,
     description: desc,
     openGraph: {
       title,

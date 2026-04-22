@@ -1,4 +1,4 @@
-# Roadmap — Claude Code Toolkit
+# Roadmap — Claude Code Stack
 
 > Source of truth for what's next. Foundational build (Phases 0–5) is complete and frozen in git tags.
 > Current active work: **Phase 6** (data scaling). Updated: 2026-04-20.
@@ -18,7 +18,7 @@ Summary only — see `git log phase-0..phase-5` for details.
 | `phase-4` | `/learn` — 12 videos, 6 courses, 4-phase roadmap |
 | `phase-5` | Auth + synced `/stack` with RLS-protected credentials |
 
-**Stack today:** 284 tools · 12 videos · 6 courses · ~6 active categories · live at [claude-code-toolkit-app.vercel.app](https://claude-code-toolkit-app.vercel.app).
+**Stack today:** 284 tools · 12 videos · 6 courses · ~6 active categories · live at [www.claudecodestack.com](https://www.claudecodestack.com).
 
 ---
 
@@ -125,7 +125,7 @@ See `SOURCES.md` for the full list. Order matters — start with highest signal/
 **Goal:** become indispensable by integrating with user's actual development flow.
 
 ### Tasks
-- [ ] **Browser extension** — right-click any GitHub repo → "Save to Claude Code Toolkit"
+- [ ] **Browser extension** — right-click any GitHub repo → "Save to Claude Code Stack"
 - [ ] **CLI tool** — `npx claude-toolkit sync` pulls your `/stack` into `.claude/claude.json`
 - [ ] **Slack/Discord bot** — post new tools in team channels
 - [ ] **RSS / Atom feeds** — per-category firehose

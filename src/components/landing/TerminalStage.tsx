@@ -173,7 +173,7 @@ export function TerminalStage({
       <header className="landing-header">
         <div className="brand">
           <span className="brand-mark">&gt;_</span>
-          <span>Claude Code Toolkit</span>
+          <span>Claude Code Stack</span>
         </div>
         <div className="landing-header-meta">
           <Link href="/explore">Explore</Link>

@@ -1,6 +1,6 @@
-# Claude Code Toolkit App — Claude Config
+# Claude Code Stack App — Claude Config
 
-> Deployed cloud version of the Claude Code Toolkit directory.
+> Deployed cloud version of the Claude Code Stack directory.
 > The static single-file version lives at `../claude-code-toolkit/` and is frozen at v18.
 
 ## Primary reference

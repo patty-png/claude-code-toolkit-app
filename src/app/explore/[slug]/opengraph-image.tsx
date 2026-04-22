@@ -14,7 +14,7 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
     .eq('slug', slug)
     .maybeSingle()
 
-  const t: any = tool ?? { name: 'Claude Code Toolkit', blurb: '', publisher: null }
+  const t: any = tool ?? { name: 'Claude Code Stack', blurb: '', publisher: null }
 
   const compact = (n: number | null | undefined) => {
     if (!n || n <= 0) return '0'
@@ -55,7 +55,7 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
             &gt;_
           </div>
           <div style={{ fontSize: 22, color: '#7a736b', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
-            Claude Code Toolkit
+            Claude Code Stack
           </div>
         </div>
 
@@ -90,7 +90,7 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
               {compact(t.installs_count)} installs
             </div>
           )}
-          <div style={{ marginLeft: 'auto', color: '#cc785c' }}>claude-code-toolkit-app.vercel.app</div>
+          <div style={{ marginLeft: 'auto', color: '#cc785c' }}>www.claudecodestack.com</div>
         </div>
       </div>
     ),
