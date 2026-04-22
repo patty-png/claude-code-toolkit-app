@@ -34,6 +34,12 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://www.claudecodestack.com',
   },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION ?? '',
+    other: {
+      'msvalidate.01': process.env.BING_SITE_VERIFICATION ?? '',
+    },
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
