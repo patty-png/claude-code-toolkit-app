@@ -40,6 +40,13 @@ export const metadata: Metadata = {
       'msvalidate.01': process.env.BING_SITE_VERIFICATION ?? '',
     },
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Claude Code Stack',
+    description: '2,435 Claude Code tools, skills, MCPs, and hooks — all in one place.',
+    site: '@pattythedev',
+    creator: '@pattythedev',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
