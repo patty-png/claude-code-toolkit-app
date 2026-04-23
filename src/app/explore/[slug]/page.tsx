@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { renderMarkdown, stripMarkdown } from '@/lib/markdown'
+import { SITE_URL } from '@/lib/site'
 import { VoteButtons } from '@/components/detail/VoteButtons'
 import { AddToStackButton } from '@/components/detail/AddToStackButton'
 import { InstallCommand } from '@/components/detail/InstallCommand'
@@ -57,6 +58,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
   return {
     title: `${title} — Claude Code Stack`,
     description: desc,
+    alternates: { canonical: `${SITE_URL}/explore/${slug}` },
     openGraph: {
       title,
       description: desc,
@@ -110,8 +112,52 @@ export default async function ToolDetailPage({ params }: RouteProps) {
   const skillHtml = await renderMarkdown(tool.skill_md ?? '')
   const claudeHtml = await renderMarkdown(tool.claude_md ?? '')
 
+  // JSON-LD structured data
+  const softwareSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: tool.name,
+    description: tool.blurb,
+    applicationCategory: 'DeveloperApplication',
+    operatingSystem: 'Cross-platform',
+    url: `${SITE_URL}/explore/${tool.slug}`,
+    ...(tool.github_stars && tool.github_stars > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: Math.min(5, Math.max(1, Math.log10(tool.github_stars + 1))),
+            ratingCount: Math.max(1, tool.github_stars),
+            bestRating: 5,
+          },
+        }
+      : {}),
+    ...(tool.publisher ? { author: { '@type': 'Person', name: tool.publisher } } : {}),
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Explore', item: `${SITE_URL}/explore` },
+      ...(tool.category_id
+        ? [{ '@type': 'ListItem', position: 2, name: (cat as any)?.label ?? tool.category_id, item: `${SITE_URL}/explore?cat=${tool.category_id}` }]
+        : []),
+      { '@type': 'ListItem', position: tool.category_id ? 3 : 2, name: tool.name, item: `${SITE_URL}/explore/${tool.slug}` },
+    ],
+  }
+
   return (
     <div className="view-app">
+      <script
+        id="schema-software"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
+      />
+      <script
+        id="schema-breadcrumb"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <Header />
 
       <main className="detail-main">

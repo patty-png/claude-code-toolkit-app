@@ -2,13 +2,23 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { Header } from '@/components/Header'
 import { ExploreView } from '@/components/directory/ExploreView'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
+import { SITE_URL } from '@/lib/site'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Claude Code Skills — Stack',
   description: 'Reusable instructions that teach your agent specific tasks. Install with a single command.',
+  alternates: { canonical: `${SITE_URL}/skills` },
+  openGraph: {
+    title: 'Claude Code Skills — Stack',
+    description: 'Reusable instructions that teach your agent specific tasks. Install with a single command.',
+    url: `${SITE_URL}/skills`,
+    siteName: 'Claude Code Stack',
+    type: 'website',
+  },
 }
 
 function compact(n: number | null | undefined): string {
@@ -152,12 +162,14 @@ export default async function SkillsPage() {
             <div className="section-num">All skills</div>
             <h2 className="serif">{skillCount.toLocaleString()} skills, <em>browse freely.</em></h2>
           </div>
-          <ExploreView
-            initialTools={initialTools}
-            categories={[]}
-            totalCount={skillCount}
-            fixedCategory="skill"
-          />
+          <Suspense fallback={null}>
+            <ExploreView
+              initialTools={initialTools}
+              categories={[]}
+              totalCount={skillCount}
+              fixedCategory="skill"
+            />
+          </Suspense>
         </section>
       </main>
 

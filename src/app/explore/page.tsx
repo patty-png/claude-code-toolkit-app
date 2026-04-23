@@ -4,8 +4,22 @@ import { TopFive } from '@/components/directory/TopFive'
 import { TrendingStrip } from '@/components/directory/TrendingStrip'
 import { Header } from '@/components/Header'
 import Link from 'next/link'
+import type { Metadata } from 'next'
+import { SITE_URL } from '@/lib/site'
 
 export const revalidate = 60
+
+export const metadata: Metadata = {
+  title: 'Explore All Tools — Claude Code Stack',
+  description: 'Browse 2,435 Claude Code tools, skills, MCPs, and hooks. Filter by category, sort by stars, install with one command.',
+  alternates: { canonical: `${SITE_URL}/explore` },
+  openGraph: {
+    title: 'Explore All Tools — Claude Code Stack',
+    description: 'Browse 2,435 Claude Code tools, filter by category.',
+    url: `${SITE_URL}/explore`,
+    type: 'website',
+  },
+}
 
 const SELECT_COLS =
   'id, slug, name, category_id, tag, blurb, url, install_command, is_featured, feature_rank, github_url, github_stars, publisher, repo_name, installs_count, upvotes, downvotes, created_at'

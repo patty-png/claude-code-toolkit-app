@@ -2,13 +2,21 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { Header } from '@/components/Header'
+import { SITE_URL } from '@/lib/site'
 
-export const revalidate = 60
-export const dynamic = 'force-dynamic'
+export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Marketplaces — Claude Code Stack',
   description: 'Publishers and organizations shipping Claude Code tools, skills, and MCPs.',
+  alternates: { canonical: `${SITE_URL}/marketplaces` },
+  openGraph: {
+    title: 'Marketplaces — Claude Code Stack',
+    description: 'Publishers and organizations shipping Claude Code tools, skills, and MCPs.',
+    url: `${SITE_URL}/marketplaces`,
+    siteName: 'Claude Code Stack',
+    type: 'website',
+  },
 }
 
 function compact(n: number | null | undefined): string {
