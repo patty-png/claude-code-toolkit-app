@@ -65,6 +65,64 @@ const DEMOS: Record<string, Segment[]> = {
   ],
 }
 
+type LearnKey = 'videos' | 'docs' | 'courses' | 'roadmap' | 'research'
+
+const LEARN_TOPICS: {
+  key: LearnKey
+  label: string
+  kicker: string
+  title: string
+  body: string
+  meta: string[]
+  cta: string
+}[] = [
+  {
+    key: 'videos',
+    label: 'Videos',
+    kicker: 'Anthropic + creators',
+    title: 'Watch, then build.',
+    body: 'Curated YouTube walkthroughs from the Anthropic team and independent creators. Filter by skill level, topic, or duration.',
+    meta: ['120+ videos', 'Updated weekly', 'No ads'],
+    cta: 'Browse videos',
+  },
+  {
+    key: 'docs',
+    label: 'Docs',
+    kicker: 'Official documentation',
+    title: 'The source of truth.',
+    body: 'Every Anthropic doc — Claude Code, Agent SDK, API, MCP spec — indexed and searchable from one place.',
+    meta: ['Always in sync', 'Deep-linked', 'Search-ready'],
+    cta: 'Open docs hub',
+  },
+  {
+    key: 'courses',
+    label: 'Free courses',
+    kicker: 'Earn certificates',
+    title: 'Zero-cost learning paths.',
+    body: 'Structured courses from Anthropic Academy and partner platforms. Every course on this tab is free to enroll.',
+    meta: ['All free', 'Certificates', 'Self-paced'],
+    cta: 'See free courses',
+  },
+  {
+    key: 'roadmap',
+    label: 'Roadmap',
+    kicker: '2-week plan',
+    title: 'Install → confident in 14 days.',
+    body: 'A day-by-day roadmap that takes you from first install to shipping custom skills, hooks, and subagents.',
+    meta: ['14 days', 'Daily tasks', 'No fluff'],
+    cta: 'Start the roadmap',
+  },
+  {
+    key: 'research',
+    label: 'Research',
+    kicker: 'Lab papers + posts',
+    title: 'Read what ships tomorrow.',
+    body: 'Agent research from Anthropic and other labs — distilled, tagged, and linked to the features they inspired.',
+    meta: ['Primary sources', 'Tagged', 'Weekly picks'],
+    cta: 'Explore research',
+  },
+]
+
 const NODES = [
   {
     key: 'mcp', label: 'MCP', desc: 'External tools & data',
@@ -134,6 +192,7 @@ export function TerminalStage({
   publisherCount?: number
 } = {}) {
   const [active, setActive] = useState<string>('intro')
+  const [learnTopic, setLearnTopic] = useState<LearnKey>('videos')
   const bodyRef = useRef<HTMLDivElement>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -187,11 +246,12 @@ export function TerminalStage({
       <div className="landing-hero">
         {/* LEFT: editorial */}
         <div className="hero-copy">
-          <div className="hero-kicker"><span className="pulse"></span> A curated command deck</div>
-          <h1>Every Claude Code tool, <em>in one place.</em></h1>
+          <div className="hero-kicker"><span className="pulse"></span> Open source · MIT · Free forever</div>
+          <h1>Every Claude Code tool, <em>free &amp; open.</em></h1>
           <p className="lede">
-            A searchable directory of MCPs, skills, subagents, hooks, plugins, and SaaS integrations — with install
-            commands on every card and a built-in project manager to track your stack.
+            A community-run directory of MCPs, skills, subagents, hooks, plugins, and SaaS integrations —
+            with install commands on every card and a built-in project manager to track your stack.
+            No paywall. No login. No tracking.
           </p>
           <div className="hero-stats">
             <span className="hero-stat"><strong>{toolCount.toLocaleString()}</strong> tools</span>
@@ -206,8 +266,15 @@ export function TerminalStage({
               <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
                 <path d="M12 .5C5.73.5.75 5.48.75 11.75c0 4.95 3.2 9.14 7.64 10.62.56.1.77-.24.77-.54v-2.1c-3.11.68-3.76-1.33-3.76-1.33-.5-1.3-1.24-1.65-1.24-1.65-1.02-.7.08-.68.08-.68 1.13.08 1.72 1.16 1.72 1.16 1 1.72 2.63 1.22 3.27.93.1-.73.4-1.22.72-1.5-2.48-.28-5.09-1.24-5.09-5.52 0-1.22.44-2.22 1.16-3.01-.12-.28-.5-1.43.11-2.98 0 0 .94-.3 3.08 1.15.9-.25 1.86-.37 2.82-.38.96.01 1.93.13 2.82.38 2.14-1.45 3.08-1.15 3.08-1.15.61 1.55.23 2.7.11 2.98.72.79 1.16 1.79 1.16 3.01 0 4.29-2.61 5.24-5.1 5.51.4.35.76 1.03.76 2.08v3.08c0 .3.2.65.78.54 4.43-1.48 7.63-5.67 7.63-10.62C23.25 5.48 18.27.5 12 .5z" />
               </svg>
-              View on GitHub
+              Star on GitHub
             </a>
+          </div>
+          <div className="hero-oss-row">
+            <span className="oss-chip"><span className="oss-dot"></span> Built in the open</span>
+            <span className="oss-sep">·</span>
+            <a href="https://github.com/patty-png/claude-code-toolkit-app" target="_blank" rel="noopener noreferrer">PRs welcome</a>
+            <span className="oss-sep">·</span>
+            <a href="https://github.com/patty-png/claude-code-toolkit-app/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT licensed</a>
           </div>
         </div>
 
@@ -248,6 +315,93 @@ export function TerminalStage({
           </div>
         </div>
       </div>
+
+      {/* Learn preview — interactive teaser for /learn */}
+      <section className="learn-strip" aria-labelledby="learn-strip-heading">
+        <div className="learn-strip-head">
+          <div>
+            <div className="learn-strip-kicker"><span className="pulse"></span> /learn</div>
+            <h2 id="learn-strip-heading" className="learn-strip-title">
+              Free learning hub, <em>built for the community.</em>
+            </h2>
+            <p className="learn-strip-lede">
+              Pick a track and preview what&apos;s inside — then dive into the full hub when you&apos;re ready.
+            </p>
+          </div>
+          <Link href="/learn" className="learn-strip-link">
+            Open the hub <span className="arrow">→</span>
+          </Link>
+        </div>
+
+        <div className="learn-interactive">
+          <div className="learn-tabs" role="tablist" aria-label="Learn topics">
+            {LEARN_TOPICS.map((t) => (
+              <button
+                key={t.key}
+                role="tab"
+                aria-selected={learnTopic === t.key}
+                className={`learn-tab ${learnTopic === t.key ? 'active' : ''}`}
+                onClick={() => setLearnTopic(t.key)}
+              >
+                <span className="learn-tab-label">{t.label}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="learn-preview">
+            {LEARN_TOPICS.map((t) => (
+              <div
+                key={t.key}
+                className={`learn-panel ${learnTopic === t.key ? 'active' : ''}`}
+                role="tabpanel"
+                aria-hidden={learnTopic !== t.key}
+              >
+                <div className="learn-panel-kicker">{t.kicker}</div>
+                <h3 className="learn-panel-title">{t.title}</h3>
+                <p className="learn-panel-body">{t.body}</p>
+                <div className="learn-panel-meta">
+                  {t.meta.map((m) => (
+                    <span key={m} className="learn-chip">{m}</span>
+                  ))}
+                </div>
+                <Link href="/learn" className="learn-panel-cta">
+                  {t.cta} <span className="arrow">→</span>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Open source ethos footer band */}
+      <section className="oss-band" aria-label="Open source">
+        <div className="oss-band-inner">
+          <div className="oss-band-copy">
+            <div className="oss-band-kicker">// open source</div>
+            <h3 className="oss-band-title">
+              Built in the open. <em>Forever free to use.</em>
+            </h3>
+            <p className="oss-band-body">
+              No paywalls, no accounts required, no data harvesting. Every card, every install command,
+              every skill and hook is public. If something&apos;s missing — send a PR.
+            </p>
+          </div>
+          <div className="oss-band-actions">
+            <a className="oss-band-btn" href="https://github.com/patty-png/claude-code-toolkit-app" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true">
+                <path d="M12 .5C5.73.5.75 5.48.75 11.75c0 4.95 3.2 9.14 7.64 10.62.56.1.77-.24.77-.54v-2.1c-3.11.68-3.76-1.33-3.76-1.33-.5-1.3-1.24-1.65-1.24-1.65-1.02-.7.08-.68.08-.68 1.13.08 1.72 1.16 1.72 1.16 1 1.72 2.63 1.22 3.27.93.1-.73.4-1.22.72-1.5-2.48-.28-5.09-1.24-5.09-5.52 0-1.22.44-2.22 1.16-3.01-.12-.28-.5-1.43.11-2.98 0 0 .94-.3 3.08 1.15.9-.25 1.86-.37 2.82-.38.96.01 1.93.13 2.82.38 2.14-1.45 3.08-1.15 3.08-1.15.61 1.55.23 2.7.11 2.98.72.79 1.16 1.79 1.16 3.01 0 4.29-2.61 5.24-5.1 5.51.4.35.76 1.03.76 2.08v3.08c0 .3.2.65.78.54 4.43-1.48 7.63-5.67 7.63-10.62C23.25 5.48 18.27.5 12 .5z" />
+              </svg>
+              GitHub
+            </a>
+            <a className="oss-band-btn ghost" href="https://github.com/patty-png/claude-code-toolkit-app/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">
+              MIT license
+            </a>
+            <a className="oss-band-btn ghost" href="https://github.com/patty-png/claude-code-toolkit-app/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">
+              Contribute
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
